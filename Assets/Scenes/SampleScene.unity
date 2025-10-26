@@ -434,6 +434,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da657ae2faacb744abe307455e3a2a91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useLocalCache: 1
+  cachedProjectsJson: {fileID: 4900000, guid: d8921717d81972d40bcb69ee16ec520e, type: 3}
   githubUsername: altf4-games
   maxProjects: 10
   excludeForks: 1

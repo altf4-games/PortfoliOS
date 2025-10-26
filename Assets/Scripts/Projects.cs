@@ -21,6 +21,10 @@ public class GitHubRepo
 
 public class Projects : MonoBehaviour
 {
+    [Header("Data Source")]
+    [SerializeField] private bool useLocalCache = true;
+    [SerializeField] private TextAsset cachedProjectsJson; // Drag the JSON file here in Inspector
+
     [Header("GitHub Settings")]
     [SerializeField] private string githubUsername = "altf4-games";
     [SerializeField] private int maxProjects = 10;
@@ -71,6 +75,69 @@ public class Projects : MonoBehaviour
         // Clear existing projects
         ClearProjects();
 
+        // Use local cache if enabled and available
+        if (useLocalCache && cachedProjectsJson != null)
+        {
+            yield return StartCoroutine(LoadFromCache());
+        }
+        else
+        {
+            // Fallback to GitHub API
+            yield return StartCoroutine(LoadFromGitHub());
+        }
+    }
+
+    private IEnumerator LoadFromCache()
+    {
+        try
+        {
+            string jsonData = cachedProjectsJson.text;
+            Debug.Log($"Loading from cache, JSON length: {jsonData.Length}");
+
+            repositories = ParseRepositories(jsonData);
+            Debug.Log($"Parsed {repositories.Count} repositories from cache");
+
+            // Filter repositories (same as GitHub loading)
+            if (excludeForks)
+            {
+                repositories.RemoveAll(repo => repo.fork);
+            }
+
+            if (showOnlyPinned)
+            {
+                repositories = repositories.FindAll(repo => System.Array.Exists(pinnedRepos, p => p == repo.name));
+            }
+
+            // Sort by stars if enabled
+            if (sortByStars)
+            {
+                repositories.Sort((a, b) => b.stargazers_count.CompareTo(a.stargazers_count));
+            }
+
+            DisplayProjects();
+
+            if (loadingIndicator != null)
+                loadingIndicator.SetActive(false);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Error loading cached projects: {e.Message}");
+            Debug.LogError($"Stack trace: {e.StackTrace}");
+            if (errorText != null)
+            {
+                errorText.text = "Failed to load projects from cache.";
+                errorText.gameObject.SetActive(true);
+            }
+
+            if (loadingIndicator != null)
+                loadingIndicator.SetActive(false);
+        }
+
+        yield return null;
+    }
+
+    private IEnumerator LoadFromGitHub()
+    {
         string apiUrl = $"https://api.github.com/users/{githubUsername}/repos?per_page=100&sort=updated";
 
         using (UnityWebRequest request = UnityWebRequest.Get(apiUrl))
@@ -136,43 +203,58 @@ public class Projects : MonoBehaviour
 
     private List<GitHubRepo> ParseRepositories(string json)
     {
-        // Add wrapper to parse JSON array
-        string wrappedJson = "{\"repos\":" + json + "}";
-        RepositoryList repoList = JsonUtility.FromJson<RepositoryList>("{\"repos\":[]}");
-
-        // Manual parsing since Unity's JsonUtility doesn't handle arrays directly
         List<GitHubRepo> repos = new List<GitHubRepo>();
 
-        // Simple JSON array parsing
-        json = json.Trim();
-        if (json.StartsWith("["))
-            json = json.Substring(1);
-        if (json.EndsWith("]"))
-            json = json.Substring(0, json.Length - 1);
-
-        // Split by "},{"
-        string[] repoStrings = json.Split(new string[] { "},{" }, System.StringSplitOptions.None);
-
-        foreach (string repoStr in repoStrings)
+        try
         {
-            string repoJson = repoStr.Trim();
-            if (!repoJson.StartsWith("{"))
-                repoJson = "{" + repoJson;
-            if (!repoJson.EndsWith("}"))
-                repoJson = repoJson + "}";
+            // Clean the JSON
+            json = json.Trim();
 
-            try
+            // Remove outer brackets
+            if (json.StartsWith("["))
+                json = json.Substring(1);
+            if (json.EndsWith("]"))
+                json = json.Substring(0, json.Length - 1);
+
+            // Split by objects - look for },\n  { or },\n{
+            string[] repoStrings = json.Split(new string[] { "},\n  {", "},\r\n  {", "},{" }, System.StringSplitOptions.RemoveEmptyEntries);
+
+            Debug.Log($"Split JSON into {repoStrings.Length} parts");
+
+            for (int i = 0; i < repoStrings.Length; i++)
             {
-                GitHubRepo repo = JsonUtility.FromJson<GitHubRepo>(repoJson);
-                if (repo != null && !string.IsNullOrEmpty(repo.name))
+                string repoJson = repoStrings[i].Trim();
+
+                // Add brackets if missing
+                if (!repoJson.StartsWith("{"))
+                    repoJson = "{" + repoJson;
+                if (!repoJson.EndsWith("}"))
+                    repoJson = repoJson + "}";
+
+                try
                 {
-                    repos.Add(repo);
+                    Debug.Log($"Attempting to parse repo {i}: {repoJson.Substring(0, Mathf.Min(100, repoJson.Length))}...");
+                    GitHubRepo repo = JsonUtility.FromJson<GitHubRepo>(repoJson);
+                    if (repo != null && !string.IsNullOrEmpty(repo.name))
+                    {
+                        repos.Add(repo);
+                        Debug.Log($"Successfully parsed: {repo.name}");
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Parsed repo {i} but it was null or had no name");
+                    }
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError($"Failed to parse repository {i}: {e.Message}");
+                    Debug.LogError($"JSON was: {repoJson}");
                 }
             }
-            catch (System.Exception e)
-            {
-                Debug.LogWarning("Failed to parse repository: " + e.Message);
-            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Error in ParseRepositories: {e.Message}");
         }
 
         return repos;
