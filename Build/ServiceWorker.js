@@ -1,9 +1,9 @@
 const cacheName = "Pradyum Mistry-PortfoliOS-0.1";
 const contentToCache = [
-    "Build/WebGL.loader.js",
-    "Build/WebGL.framework.js.gz",
-    "Build/WebGL.data.gz",
-    "Build/WebGL.wasm.gz",
+    "Build/Build.loader.js",
+    "Build/Build.framework.js",
+    "Build/Build.data",
+    "Build/Build.wasm",
     "TemplateData/style.css"
 
 ];
