@@ -7,6 +7,7 @@ public class Menu : MonoBehaviour
     public GameObject menuObject;
     public GameObject projectWindow;
     public GameObject hackathonWindow;
+    public GameObject settingsWindow;
 
     public void ToggleMenu()
     {
@@ -21,5 +22,10 @@ public class Menu : MonoBehaviour
     public void ToggleHackathonFolder()
     {
         hackathonWindow.SetActive(!hackathonWindow.activeSelf);
+    }
+
+    public void SettingsWindow()
+    {
+        settingsWindow.SetActive(!settingsWindow.activeSelf);
     }
 }

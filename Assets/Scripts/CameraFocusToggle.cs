@@ -20,6 +20,9 @@ public class CameraFocusToggle : MonoBehaviour
     [SerializeField] private GameObject osCanvas;
     [SerializeField] private GameObject osSCreen;
 
+    [Header("Startup Settings")]
+    [SerializeField] private bool startFocused = true; // Start the game focused by default
+
     private Camera cam;
     private CameraLookAround lookAroundScript;
     private bool isFocused = false;
@@ -31,7 +34,7 @@ public class CameraFocusToggle : MonoBehaviour
     private float startFOV;
     private float targetFOV;
 
-    void Start()
+    void Awake()
     {
         cam = GetComponent<Camera>();
         lookAroundScript = GetComponent<CameraLookAround>();
@@ -52,9 +55,9 @@ public class CameraFocusToggle : MonoBehaviour
         }
         else
         {
-            // Make sure OS Canvas starts inactive
-            osCanvas.SetActive(false);
-            osSCreen.SetActive(false);
+            // Set initial state based on startFocused
+            // osCanvas.SetActive(startFocused);
+            // osSCreen.SetActive(startFocused);
         }
 
         // Store the initial FOV if not set
@@ -62,6 +65,39 @@ public class CameraFocusToggle : MonoBehaviour
         {
             normalFOV = cam.fieldOfView;
         }
+
+        // Apply initial focused state if needed
+        if (startFocused)
+        {
+            osCanvas.SetActive(startFocused);
+            osSCreen.SetActive(startFocused);
+            ApplyFocusedStateImmediate();
+        }
+    }
+
+    private void ApplyFocusedStateImmediate()
+    {
+        // Store normal rotation before applying focused state
+        normalRotation = transform.localEulerAngles;
+
+        // Apply focused rotation and FOV immediately without tweening
+        transform.localRotation = Quaternion.Euler(focusRotation);
+
+        if (cam != null)
+        {
+            cam.fieldOfView = focusFOV;
+        }
+
+        // Disable look around script when focused
+        if (lookAroundScript != null)
+        {
+            lookAroundScript.enabled = false;
+        }
+
+        // Set focused state
+        isFocused = true;
+
+        Debug.Log("Started in focused state");
     }
 
     void Update()
@@ -72,7 +108,7 @@ public class CameraFocusToggle : MonoBehaviour
         }
     }
 
-    void ToggleFocus()
+    public void ToggleFocus()
     {
         if (isFocused)
         {
@@ -224,5 +260,14 @@ public class CameraFocusToggle : MonoBehaviour
     public bool IsTweening()
     {
         return isTweening;
+    }
+
+    public void ForceUnfocus()
+    {
+        if (isFocused && !isTweening)
+        {
+            StartCoroutine(TweenToNormal());
+            isFocused = false;
+        }
     }
 }
