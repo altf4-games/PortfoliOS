@@ -8,6 +8,7 @@ public class CameraFocusToggle : MonoBehaviour
     [SerializeField] private Vector3 focusRotation = new Vector3(0f, 90f, 0f);
     [SerializeField] private float focusFOV = 27f;
     [SerializeField] private float normalFOV = 70f;
+    [SerializeField] private bool useLookAtTarget = true; // Use LookAt to screen instead of fixed rotation
 
     [Header("Tween Settings")]
     [SerializeField] private float tweenDuration = 1f;
@@ -19,6 +20,9 @@ public class CameraFocusToggle : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private GameObject osCanvas;
     [SerializeField] private GameObject osSCreen;
+    
+    private FitScreenToCamera screenFitter;
+    private bool screenFitterInitialized = false;
 
     [Header("Startup Settings")]
     [SerializeField] private bool startFocused = true; // Start the game focused by default
@@ -38,6 +42,7 @@ public class CameraFocusToggle : MonoBehaviour
     {
         cam = GetComponent<Camera>();
         lookAroundScript = GetComponent<CameraLookAround>();
+        screenFitter = GetComponent<FitScreenToCamera>();
 
         if (cam == null)
         {
@@ -47,6 +52,11 @@ public class CameraFocusToggle : MonoBehaviour
         if (lookAroundScript == null)
         {
             Debug.LogWarning("CameraFocusToggle: No CameraLookAround script found!");
+        }
+        
+        if (screenFitter == null)
+        {
+            Debug.LogWarning("CameraFocusToggle: No FitScreenToCamera script found! Screen may not fit properly.");
         }
 
         if (osCanvas == null)
@@ -80,8 +90,17 @@ public class CameraFocusToggle : MonoBehaviour
         // Store normal rotation before applying focused state
         normalRotation = transform.localEulerAngles;
 
-        // Apply focused rotation and FOV immediately without tweening
-        transform.localRotation = Quaternion.Euler(focusRotation);
+        // Apply focused rotation - use LookAt to screen center if enabled
+        if (useLookAtTarget && osSCreen != null)
+        {
+            // Get the center of the screen quad for all aspect ratios
+            Vector3 screenCenter = osSCreen.transform.position;
+            transform.LookAt(screenCenter);
+        }
+        else
+        {
+            transform.localRotation = Quaternion.Euler(focusRotation);
+        }
 
         if (cam != null)
         {
@@ -105,6 +124,24 @@ public class CameraFocusToggle : MonoBehaviour
         if (Input.GetKeyDown(toggleKey) && !isTweening)
         {
             ToggleFocus();
+        }
+    }
+
+    void LateUpdate()
+    {
+        // Keep camera locked on screen quad center when focused and not tweening
+        // This ensures the wallpaper is always rendered properly for blur material
+        if (isFocused && !isTweening && useLookAtTarget && osSCreen != null)
+        {
+            Vector3 screenCenter = osSCreen.transform.position;
+            transform.LookAt(screenCenter);
+            
+            // Update screen fit after camera rotation to ensure proper framing
+            if (screenFitter != null && !screenFitterInitialized)
+            {
+                screenFitter.Initialize();
+                screenFitterInitialized = true;
+            }
         }
     }
 
@@ -137,7 +174,19 @@ public class CameraFocusToggle : MonoBehaviour
         // Store current state
         normalRotation = transform.localEulerAngles;
         startRotation = transform.localRotation;
-        targetRotation = Quaternion.Euler(focusRotation);
+        
+        // Calculate target rotation - use LookAt to screen center if enabled
+        if (useLookAtTarget && osSCreen != null)
+        {
+            Vector3 screenCenter = osSCreen.transform.position;
+            Vector3 directionToTarget = screenCenter - transform.position;
+            targetRotation = Quaternion.LookRotation(directionToTarget);
+        }
+        else
+        {
+            targetRotation = Quaternion.Euler(focusRotation);
+        }
+        
         startFOV = cam.fieldOfView;
         targetFOV = focusFOV;
 
