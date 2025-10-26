@@ -14,7 +14,7 @@ public class CameraFocusToggle : MonoBehaviour
     [SerializeField] private AnimationCurve tweenCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
     [Header("Input")]
-    [SerializeField] private KeyCode toggleKey = KeyCode.F;
+    [SerializeField] private KeyCode toggleKey = KeyCode.Escape;
 
     [Header("UI References")]
     [SerializeField] private GameObject osCanvas;

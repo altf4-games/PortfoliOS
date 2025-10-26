@@ -8,6 +8,7 @@ public class Menu : MonoBehaviour
     public GameObject projectWindow;
     public GameObject hackathonWindow;
     public GameObject settingsWindow;
+    public GameObject terminalWindow;
 
     public void ToggleMenu()
     {
@@ -27,5 +28,10 @@ public class Menu : MonoBehaviour
     public void SettingsWindow()
     {
         settingsWindow.SetActive(!settingsWindow.activeSelf);
+    }
+
+    public void TerminalWindow()
+    {
+        terminalWindow.SetActive(!terminalWindow.activeSelf);
     }
 }

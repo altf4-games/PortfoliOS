@@ -10,11 +10,11 @@ public class SetWallpaper : MonoBehaviour
     public Material material;
     public Sprite[] images;
     public Texture[] imagesW;
-    private int currentWallpaper = 5;
+    private int currentWallpaper = 4;
 
     private void Start()
     {
-        currentWallpaper = PlayerPrefs.GetInt("Wallpaper", 5);
+        currentWallpaper = PlayerPrefs.GetInt("Wallpaper", 4);
         wallpaperImage.sprite = images[currentWallpaper - 1];
         wallpaperImage2.sprite = images[currentWallpaper - 1];
         material.SetTexture("_BaseMap", imagesW[currentWallpaper - 1]);
