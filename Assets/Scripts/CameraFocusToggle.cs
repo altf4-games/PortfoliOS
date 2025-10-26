@@ -20,7 +20,7 @@ public class CameraFocusToggle : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private GameObject osCanvas;
     [SerializeField] private GameObject osSCreen;
-    
+
     private FitScreenToCamera screenFitter;
     private bool screenFitterInitialized = false;
 
@@ -53,7 +53,7 @@ public class CameraFocusToggle : MonoBehaviour
         {
             Debug.LogWarning("CameraFocusToggle: No CameraLookAround script found!");
         }
-        
+
         if (screenFitter == null)
         {
             Debug.LogWarning("CameraFocusToggle: No FitScreenToCamera script found! Screen may not fit properly.");
@@ -121,6 +121,12 @@ public class CameraFocusToggle : MonoBehaviour
 
     void Update()
     {
+        // Don't allow toggling if 3D mode is disabled
+        if (PlayerPrefs.GetInt("Disable3D", 0) == 1)
+        {
+            return;
+        }
+
         if (Input.GetKeyDown(toggleKey) && !isTweening)
         {
             ToggleFocus();
@@ -135,7 +141,7 @@ public class CameraFocusToggle : MonoBehaviour
         {
             Vector3 screenCenter = osSCreen.transform.position;
             transform.LookAt(screenCenter);
-            
+
             // Update screen fit after camera rotation to ensure proper framing
             if (screenFitter != null && !screenFitterInitialized)
             {
@@ -174,19 +180,10 @@ public class CameraFocusToggle : MonoBehaviour
         // Store current state
         normalRotation = transform.localEulerAngles;
         startRotation = transform.localRotation;
-        
-        // Calculate target rotation - use LookAt to screen center if enabled
-        if (useLookAtTarget && osSCreen != null)
-        {
-            Vector3 screenCenter = osSCreen.transform.position;
-            Vector3 directionToTarget = screenCenter - transform.position;
-            targetRotation = Quaternion.LookRotation(directionToTarget);
-        }
-        else
-        {
-            targetRotation = Quaternion.Euler(focusRotation);
-        }
-        
+
+        // Always use focusRotation for tweening - LateUpdate will handle LookAt after tween completes
+        targetRotation = Quaternion.Euler(focusRotation);
+
         startFOV = cam.fieldOfView;
         targetFOV = focusFOV;
 

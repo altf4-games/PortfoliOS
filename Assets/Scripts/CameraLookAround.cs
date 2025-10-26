@@ -28,9 +28,6 @@ public class CameraLookAround : MonoBehaviour
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-
         yRotation = transform.localEulerAngles.y;
         xRotation = transform.localEulerAngles.x;
         if (xRotation > 180f) xRotation -= 360f;

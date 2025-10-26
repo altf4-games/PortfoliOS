@@ -336,13 +336,16 @@ public class TerminalSystem : MonoBehaviour
 
     private void CommandSkills()
     {
-        AppendOutput("Technical Skills:");
+        AppendOutput("Core Technical Skills:");
         AppendOutput("-------------------");
-        AppendOutput("Languages: C#, C++, Python, JavaScript, Java, Dart");
-        AppendOutput("Web: React, Node.js, FastAPI, Express, Next.js");
-        AppendOutput("Databases: MongoDB, PostgreSQL, Firebase");
-        AppendOutput("Game Engines: Unity, Unreal Engine");
-        AppendOutput("Mobile: Flutter, React Native");
+        AppendOutput("→ Full-Stack Development (Web & Mobile)");
+        AppendOutput("→ AI/ML");
+        AppendOutput("→ Competitive Programming (4 Star CodeChef, 300+ LeetCode)");
+        AppendOutput("→ Backend Architecture & APIs");
+        AppendOutput("→ Real-time Communication (WebRTC, Socket.io)");
+        AppendOutput("→ Database Design & Optimization");
+        AppendOutput("→ Game Development (Unity, Unreal Engine)");
+        AppendOutput("→ XR Development (WebXR, AR/VR)");
     }
 
     private void CommandAchievements()
@@ -404,7 +407,7 @@ public class TerminalSystem : MonoBehaviour
 
     private void CommandWhoAmI()
     {
-        AppendOutput("Pradyum Mistry - Developer, Game Designer, and XR Enthusiast.");
+        AppendOutput("Pradyum Mistry - Full Stack Developer, Game Developer, App Developer, Competitive Programmer, and AI/ML Enthusiast.");
     }
 
     private void CommandTechStack()
@@ -511,16 +514,25 @@ public class TerminalSystem : MonoBehaviour
 
     private void CommandExplore()
     {
-        // Don't use AppendOutput here as it starts coroutines
+        // Check if 3D mode is disabled
+        if (PlayerPrefs.GetInt("Disable3D", 0) == 1)
+        {
+            // 3D is disabled, show message
+            AppendOutput("Explore mode is disabled.");
+            AppendOutput("Please uncheck 'Disable 3D' in Settings to use this feature.");
+            return;
+        }
+
+        // Don't use AppendOutput here as it starts coroutines after this point
         // Just switch to explore mode immediately
-        
+
         // Find and trigger CameraFocusToggle to unfocus (return to explore mode)
         CameraFocusToggle cameraToggle = FindObjectOfType<CameraFocusToggle>();
         if (cameraToggle != null)
         {
             cameraToggle.ForceUnfocus();
         }
-        
+
         // Close terminal immediately
         if (terminalObject != null)
         {

@@ -6,7 +6,7 @@ public class FitScreenToCamera : MonoBehaviour
     [Header("References")]
     [SerializeField] private Camera cam;
     [SerializeField] private Transform screenQuad;
-    
+
     [Header("Settings")]
     [SerializeField] private bool updateInPlayMode = true;
     [SerializeField] private bool updateInEditMode = true;
@@ -70,7 +70,7 @@ public class FitScreenToCamera : MonoBehaviour
 
         // Position quad in front of camera at calculated distance
         screenQuad.position = cam.transform.position + cam.transform.forward * distance;
-        
+
         // Make quad face the camera
         screenQuad.rotation = cam.transform.rotation;
 
