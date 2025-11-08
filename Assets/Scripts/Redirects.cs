@@ -19,7 +19,9 @@ public class Redirects : MonoBehaviour
 
     private IEnumerator FetchAndOpenResume()
     {
-        using (UnityWebRequest request = UnityWebRequest.Get(RESUME_URL_ENDPOINT))
+        // Add timestamp to prevent caching
+        string url = RESUME_URL_ENDPOINT + "?t=" + System.DateTime.UtcNow.Ticks;
+        using (UnityWebRequest request = UnityWebRequest.Get(url))
         {
             yield return request.SendWebRequest();
 

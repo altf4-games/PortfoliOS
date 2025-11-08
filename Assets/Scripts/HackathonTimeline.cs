@@ -74,7 +74,10 @@ public class HackathonTimeline : MonoBehaviour
         // Clear existing timeline items
         ClearTimeline();
 
-        using (UnityWebRequest request = UnityWebRequest.Get(timelineURL))
+        // Add timestamp to prevent caching
+        string finalURL = timelineURL + "?t=" + System.DateTime.UtcNow.Ticks;
+
+        using (UnityWebRequest request = UnityWebRequest.Get(finalURL))
         {
             yield return request.SendWebRequest();
 
