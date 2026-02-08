@@ -2,9 +2,20 @@
 
 My interactive 3D portfolio experience built with Unity, designed as a functional operating system interface. Explore my work through a virtual desktop environment featuring a Unix-style terminal, project showcases, and immersive 3D navigation.
 
-## Overview
+## Screenshots
 
-PortfoliOS transforms the traditional portfolio website into an engaging 3D experience. Users can interact with a virtual computer setup, browse projects through an OS-inspired interface, and explore achievements through an integrated terminal system.
+![OS Mode - Terminal Interface](Public/Screenshot%202026-02-08%20201925.png)
+*Interactive desktop environment with applications and settings*
+
+![Explore Mode - 3D Environment](Public/Screenshot%202026-02-08%20202058.png)
+*Terminal interface with portfolio commands and system information*
+
+![Project Showcase](Public/Screenshot%202026-02-08%20202117.png)
+*Free-look 3D navigation of the virtual environment*
+
+![Desktop Interface](Public/Screenshot%202026-02-08%20202241.png)
+*GitHub repository showcase with real-time data*
+
 
 ## Features
 
