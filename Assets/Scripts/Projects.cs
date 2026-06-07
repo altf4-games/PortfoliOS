@@ -45,12 +45,12 @@ public class Projects : MonoBehaviour
     // Pinned repositories (manually curated based on your profile)
     private string[] pinnedRepos = new string[]
     {
-        "Voyage3",
-        "RunFT",
+        "Skill-Versus",
+        "Project-Relay",
         "Accident-Analysis-Dashboard",
-        "CatchPhish",
-        "Cultur.AI",
-        "Heart-Quake"
+        "RunFT",
+        "CredShield",
+        "Heart-Quake",
     };
 
     void Start()
