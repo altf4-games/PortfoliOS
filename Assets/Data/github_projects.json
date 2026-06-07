@@ -1,9 +1,9 @@
 [
   {
     "name": "Skill-Versus",
-    "description": "Multiplayer skill-based versus game",
+    "description": "Repository for Skill Versus, a competitive 1v1 dueling platform.",
     "html_url": "https://github.com/altf4-games/Skill-Versus",
-    "language": "C#",
+    "language": "TypeScript",
     "stargazers_count": 0,
     "forks_count": 0,
     "updated_at": "2026-06-07T00:00:00Z",
@@ -12,9 +12,9 @@
   },
   {
     "name": "Project-Relay",
-    "description": "Collaborative relay-based project",
+    "description": "Secure, SSH-Tunneled VPS Monitoring. Powered by Server-Driven UI.",
     "html_url": "https://github.com/altf4-games/Project-Relay",
-    "language": "C#",
+    "language": "TypeScript",
     "stargazers_count": 0,
     "forks_count": 0,
     "updated_at": "2026-06-07T00:00:00Z",
@@ -45,7 +45,7 @@
   },
   {
     "name": "CredShield",
-    "description": "Credential protection and phishing shield",
+    "description": "Submission for React Native Mini Project.",
     "html_url": "https://github.com/altf4-games/CredShield",
     "language": "JavaScript",
     "stargazers_count": 0,
