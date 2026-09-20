@@ -33,20 +33,22 @@ export default function OssWindow() {
               href={repoUrl}
               target="_blank"
               rel="noreferrer"
-              className="text-sm font-semibold text-white leading-snug hover:underline"
+              className="inline-flex items-center gap-1 text-sm font-semibold text-white underline decoration-white/30 underline-offset-2 hover:decoration-cyan-300 hover:text-cyan-300 transition-colors cursor-pointer"
             >
               {repo}
+              <span className="text-[11px]">↗</span>
             </a>
-            <div className="flex flex-wrap gap-x-2 gap-y-1 mt-1.5">
+            <div className="mt-1.5 space-y-1">
               {prs.map((pr) => (
                 <a
                   key={pr.url}
                   href={pr.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-[11px] text-cyan-300/90 hover:text-cyan-200 transition-colors"
+                  className="flex items-center justify-between rounded-md bg-cyan-400/5 hover:bg-cyan-400/15 border border-cyan-400/20 hover:border-cyan-400/50 px-2.5 py-1.5 text-[12px] text-cyan-300 hover:text-cyan-200 underline decoration-cyan-300/40 hover:decoration-cyan-200 underline-offset-2 transition-colors cursor-pointer"
                 >
-                  #{pr.number}
+                  <span>Pull Request #{pr.number}</span>
+                  <span className="text-cyan-300/60">↗</span>
                 </a>
               ))}
             </div>
