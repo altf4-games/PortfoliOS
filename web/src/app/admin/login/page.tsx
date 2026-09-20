@@ -1,57 +1,30 @@
-"use client";
-
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { signIn } from "@/auth";
 
 export default function AdminLoginPage() {
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
-
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    const res = await fetch("/api/admin/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password }),
-    });
-
-    setLoading(false);
-
-    if (res.ok) {
-      router.push("/admin");
-      router.refresh();
-    } else {
-      const body = await res.json().catch(() => ({}));
-      setError(body.error ?? "Login failed.");
-    }
-  }
-
   return (
     <main className="min-h-dvh flex items-center justify-center bg-[#0a0a0c] text-white px-4">
-      <form onSubmit={onSubmit} className="w-full max-w-xs space-y-4">
-        <h1 className="text-lg font-mono text-center">PortfoliOS Admin</h1>
-        <input
-          type="password"
-          autoFocus
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          className="w-full rounded-md bg-white/10 border border-white/10 px-3 py-2 text-sm outline-none focus:border-cyan-400"
-        />
-        {error && <p className="text-xs text-red-400">{error}</p>}
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded-md bg-cyan-500 hover:bg-cyan-400 disabled:opacity-50 text-black text-sm font-medium py-2 transition-colors"
+      <div className="w-full max-w-xs space-y-6 text-center">
+        <h1 className="text-lg font-mono">PortfoliOS Admin</h1>
+        <p className="text-xs text-white/50">
+          Sign in with the GitHub account that owns this site. Any other account is rejected.
+        </p>
+        <form
+          action={async () => {
+            "use server";
+            await signIn("github", { redirectTo: "/admin" });
+          }}
         >
-          {loading ? "Signing in..." : "Sign in"}
-        </button>
-      </form>
+          <button
+            type="submit"
+            className="w-full flex items-center justify-center gap-2 rounded-md bg-white hover:bg-white/90 text-black text-sm font-medium py-2 transition-colors"
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z" />
+            </svg>
+            Sign in with GitHub
+          </button>
+        </form>
+      </div>
     </main>
   );
 }

@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import { SESSION_COOKIE, verifySessionToken } from "@/lib/auth";
+import { NextResponse } from "next/server";
+import { auth } from "@/auth";
 
-export async function proxy(req: NextRequest) {
+export const proxy = auth((req) => {
   const { pathname } = req.nextUrl;
 
   const isProtectedPage = pathname.startsWith("/admin") && pathname !== "/admin/login";
@@ -11,10 +11,7 @@ export async function proxy(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const token = req.cookies.get(SESSION_COOKIE)?.value;
-  const valid = await verifySessionToken(token);
-
-  if (valid) {
+  if (req.auth) {
     return NextResponse.next();
   }
 
@@ -22,9 +19,8 @@ export async function proxy(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const loginUrl = new URL("/admin/login", req.url);
-  return NextResponse.redirect(loginUrl);
-}
+  return NextResponse.redirect(new URL("/admin/login", req.nextUrl));
+});
 
 export const config = {
   matcher: ["/admin/:path*", "/api/admin/:path*"],
