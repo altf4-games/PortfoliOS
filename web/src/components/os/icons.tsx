@@ -64,6 +64,14 @@ export function GearIcon({ className }: { className?: string }) {
   );
 }
 
+export function SteamIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
+      <path d="M12 2C6.99 2 2.87 5.8 2.32 10.67l5.24 2.17a2.7 2.7 0 0 1 1.53-.47c.05 0 .1 0 .15.01l2.33-3.4v-.05a3.53 3.53 0 0 1 3.52-3.52 3.53 3.53 0 0 1 0 7.06h-.08l-3.34 2.39v.13a2.72 2.72 0 0 1-2.72 2.72 2.72 2.72 0 0 1-2.68-2.28l-3.75-1.56C3.4 18.02 7.32 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2Zm-2.9 14.86-1.2-.5a2.06 2.06 0 0 0 3.83-.24 2.06 2.06 0 0 0-1.9-2.81 2 2 0 0 0-.8.16l1.24.51a1.52 1.52 0 0 1-1.16 2.81l-.01.07Zm9.55-8.85a2.35 2.35 0 1 0-4.7 0 2.35 2.35 0 0 0 4.7 0Zm-4.11 0a1.77 1.77 0 1 1 3.53 0 1.77 1.77 0 0 1-3.53 0Z" />
+    </svg>
+  );
+}
+
 export function ResumeIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">

@@ -27,7 +27,7 @@ export default function Home() {
 
   return (
     <ForceLandscape>
-      <main className="relative w-full h-dvh overflow-hidden bg-black select-none">
+      <main className="relative w-full h-full overflow-hidden bg-black select-none">
         <AudioManager />
         {!disable3D && <SceneCanvas />}
 

@@ -50,7 +50,11 @@ interface AppState {
   minimizeWindow: (id: WindowId) => void;
   toggleMaximizeWindow: (id: WindowId, viewport: { width: number; height: number }) => void;
   moveWindow: (id: WindowId, x: number, y: number) => void;
+  resizeWindow: (id: WindowId, width: number, height: number) => void;
 }
+
+export const MIN_WINDOW_WIDTH = 320;
+export const MIN_WINDOW_HEIGHT = 240;
 
 let stagger = 0;
 
@@ -132,12 +136,12 @@ export const useAppStore = create<AppState>()(
           if (win.maximized && win.prevRect) {
             return { windows: { ...s.windows, [id]: { ...win, ...win.prevRect, maximized: false } } };
           }
-          const margin = 24;
+          const topInset = 32; // clears the menu bar
           const maximizedRect: Rect = {
-            x: margin,
-            y: 44,
-            width: viewport.width - margin * 2,
-            height: viewport.height - 44 - 100,
+            x: 0,
+            y: topInset,
+            width: viewport.width,
+            height: viewport.height - topInset,
           };
           return {
             windows: {
@@ -152,6 +156,22 @@ export const useAppStore = create<AppState>()(
           const win = s.windows[id];
           if (!win) return {};
           return { windows: { ...s.windows, [id]: { ...win, x, y } } };
+        }),
+
+      resizeWindow: (id, width, height) =>
+        set((s) => {
+          const win = s.windows[id];
+          if (!win || win.maximized) return {};
+          return {
+            windows: {
+              ...s.windows,
+              [id]: {
+                ...win,
+                width: Math.max(MIN_WINDOW_WIDTH, width),
+                height: Math.max(MIN_WINDOW_HEIGHT, height),
+              },
+            },
+          };
         }),
     }),
     {

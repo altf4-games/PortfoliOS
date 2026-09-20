@@ -13,6 +13,7 @@
   },
   "education": [
     {
+      "id": "kjsce-btech",
       "degree": "B.Tech in Computer Engineering",
       "institution": "K.J. Somaiya College of Engineering, Mumbai",
       "period": "Expected Graduation: 2027",
@@ -21,11 +22,13 @@
   ],
   "experience": [
     {
+      "id": "vyuxr-intern",
       "role": "Game Development & XR Intern",
       "org": "VyuXR Immersive Studios",
       "period": "May 2025 - June 2025"
     },
     {
+      "id": "team-vision-tech-head",
       "role": "Tech Head",
       "org": "Team Vision AR/VR Club",
       "period": "July 2024 - May 2025"

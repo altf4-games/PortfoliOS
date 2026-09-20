@@ -1,4 +1,5 @@
 export interface EducationEntry {
+  id: string;
   degree: string;
   institution: string;
   period: string;
@@ -6,6 +7,7 @@ export interface EducationEntry {
 }
 
 export interface ExperienceEntry {
+  id: string;
   role: string;
   org: string;
   period: string;

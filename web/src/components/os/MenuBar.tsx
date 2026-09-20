@@ -25,7 +25,7 @@ export default function MenuBar() {
   }, []);
 
   return (
-    <div className="pointer-events-auto h-7 flex items-center justify-between px-4 bg-black/40 backdrop-blur-2xl border-b border-white/10 text-[13px] text-white/90 select-none">
+    <div className="pointer-events-auto absolute top-0 inset-x-0 z-40 h-7 flex items-center justify-between px-4 bg-black/40 backdrop-blur-2xl border-b border-white/10 text-[13px] text-white/90 select-none">
       <div className="flex items-center gap-4">
         <span className="font-semibold">◆</span>
         <span className="font-semibold">{focusedWindow ? APP_NAMES[focusedWindow] : "PortfoliOS"}</span>

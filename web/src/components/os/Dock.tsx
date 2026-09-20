@@ -16,7 +16,7 @@ export default function Dock() {
   const openWindow = useAppStore((s) => s.openWindow);
 
   return (
-    <div className="pointer-events-none absolute bottom-3 left-0 right-0 flex justify-center">
+    <div className="pointer-events-none absolute bottom-3 left-0 right-0 z-40 flex justify-center">
       <div className="pointer-events-auto flex items-end gap-2 px-3 py-2 rounded-2xl bg-white/10 backdrop-blur-2xl border border-white/15 shadow-2xl">
         {DOCK_ITEMS.map((item) => {
           const isOpen = Boolean(windows[item.id]);

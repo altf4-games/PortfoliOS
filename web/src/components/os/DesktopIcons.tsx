@@ -1,8 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { useSiteData } from "@/lib/useSiteData";
-import { GitHubIcon, LinkedInIcon, ItchIcon, ResumeIcon } from "./icons";
+import { GitHubIcon, LinkedInIcon, ItchIcon, ResumeIcon, SteamIcon } from "./icons";
 
 export default function DesktopIcons() {
   const site = useSiteData();
@@ -13,11 +12,7 @@ export default function DesktopIcons() {
     { label: "GitHub", href: site.profile.githubUrl, icon: <GitHubIcon className="w-6 h-6" /> },
     { label: "LinkedIn", href: site.profile.linkedinUrl, icon: <LinkedInIcon className="w-6 h-6" /> },
     { label: "Itch.io", href: site.profile.itchUrl, icon: <ItchIcon className="w-6 h-6" /> },
-    {
-      label: "Steam",
-      href: site.profile.steamUrl,
-      icon: <Image src="/icons/steam.webp" alt="" width={24} height={24} />,
-    },
+    { label: "Steam", href: site.profile.steamUrl, icon: <SteamIcon className="w-6 h-6" /> },
   ];
 
   return (

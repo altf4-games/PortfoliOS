@@ -134,6 +134,198 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
               onChange={(e) => setData({ ...data, profile: { ...data.profile, steamUrl: e.target.value } })}
             />
           </Field>
+          <Field label="Terminal hostname">
+            <input
+              className={inputClass}
+              value={data.profile.hostname}
+              onChange={(e) => setData({ ...data, profile: { ...data.profile, hostname: e.target.value } })}
+            />
+          </Field>
+        </div>
+      </section>
+
+      {/* Education */}
+      <section className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-cyan-300">Education</h2>
+          <button
+            className="text-xs text-cyan-300 hover:text-cyan-200"
+            onClick={() =>
+              setData({
+                ...data,
+                education: [
+                  ...data.education,
+                  { id: crypto.randomUUID(), degree: "", institution: "", period: "", detail: "" },
+                ],
+              })
+            }
+          >
+            + Add
+          </button>
+        </div>
+        <div className="space-y-3">
+          {data.education.map((edu, i) => (
+            <div key={edu.id} className="space-y-2 bg-white/5 rounded-md p-2">
+              <div className="grid grid-cols-2 gap-2">
+                <input
+                  className={inputClass}
+                  placeholder="Degree"
+                  value={edu.degree}
+                  onChange={(e) => {
+                    const next = [...data.education];
+                    next[i] = { ...edu, degree: e.target.value };
+                    setData({ ...data, education: next });
+                  }}
+                />
+                <input
+                  className={inputClass}
+                  placeholder="Institution"
+                  value={edu.institution}
+                  onChange={(e) => {
+                    const next = [...data.education];
+                    next[i] = { ...edu, institution: e.target.value };
+                    setData({ ...data, education: next });
+                  }}
+                />
+              </div>
+              <div className="grid grid-cols-[1fr_1fr_auto] gap-2">
+                <input
+                  className={inputClass}
+                  placeholder="Period (e.g. Expected Graduation: 2027)"
+                  value={edu.period}
+                  onChange={(e) => {
+                    const next = [...data.education];
+                    next[i] = { ...edu, period: e.target.value };
+                    setData({ ...data, education: next });
+                  }}
+                />
+                <input
+                  className={inputClass}
+                  placeholder="Detail (e.g. CGPA: 9.5)"
+                  value={edu.detail ?? ""}
+                  onChange={(e) => {
+                    const next = [...data.education];
+                    next[i] = { ...edu, detail: e.target.value };
+                    setData({ ...data, education: next });
+                  }}
+                />
+                <button
+                  className="text-red-400 hover:text-red-300 text-xs px-2"
+                  onClick={() => setData({ ...data, education: data.education.filter((_, idx) => idx !== i) })}
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Experience */}
+      <section className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-cyan-300">Work Experience</h2>
+          <button
+            className="text-xs text-cyan-300 hover:text-cyan-200"
+            onClick={() =>
+              setData({
+                ...data,
+                experience: [...data.experience, { id: crypto.randomUUID(), role: "", org: "", period: "" }],
+              })
+            }
+          >
+            + Add
+          </button>
+        </div>
+        <div className="space-y-3">
+          {data.experience.map((exp, i) => (
+            <div key={exp.id} className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 items-start bg-white/5 rounded-md p-2">
+              <input
+                className={inputClass}
+                placeholder="Role"
+                value={exp.role}
+                onChange={(e) => {
+                  const next = [...data.experience];
+                  next[i] = { ...exp, role: e.target.value };
+                  setData({ ...data, experience: next });
+                }}
+              />
+              <input
+                className={inputClass}
+                placeholder="Organization"
+                value={exp.org}
+                onChange={(e) => {
+                  const next = [...data.experience];
+                  next[i] = { ...exp, org: e.target.value };
+                  setData({ ...data, experience: next });
+                }}
+              />
+              <input
+                className={inputClass}
+                placeholder="Period"
+                value={exp.period}
+                onChange={(e) => {
+                  const next = [...data.experience];
+                  next[i] = { ...exp, period: e.target.value };
+                  setData({ ...data, experience: next });
+                }}
+              />
+              <button
+                className="text-red-400 hover:text-red-300 text-xs px-2 py-2"
+                onClick={() => setData({ ...data, experience: data.experience.filter((_, idx) => idx !== i) })}
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Tech Stack */}
+      <section className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-cyan-300">Tech Stack</h2>
+          <button
+            className="text-xs text-cyan-300 hover:text-cyan-200"
+            onClick={() => setData({ ...data, techStack: { ...data.techStack, "New Category": "" } })}
+          >
+            + Add
+          </button>
+        </div>
+        <div className="space-y-2">
+          {Object.entries(data.techStack).map(([category, value], i) => (
+            <div key={i} className="grid grid-cols-[1fr_2fr_auto] gap-2">
+              <input
+                className={inputClass}
+                placeholder="Category"
+                value={category}
+                onChange={(e) => {
+                  const entries = Object.entries(data.techStack);
+                  entries[i] = [e.target.value, value];
+                  setData({ ...data, techStack: Object.fromEntries(entries) });
+                }}
+              />
+              <input
+                className={inputClass}
+                placeholder="Comma-separated technologies"
+                value={value}
+                onChange={(e) => {
+                  const entries = Object.entries(data.techStack);
+                  entries[i] = [category, e.target.value];
+                  setData({ ...data, techStack: Object.fromEntries(entries) });
+                }}
+              />
+              <button
+                className="text-red-400 hover:text-red-300 text-xs px-2"
+                onClick={() => {
+                  const entries = Object.entries(data.techStack).filter((_, idx) => idx !== i);
+                  setData({ ...data, techStack: Object.fromEntries(entries) });
+                }}
+              >
+                Remove
+              </button>
+            </div>
+          ))}
         </div>
       </section>
 

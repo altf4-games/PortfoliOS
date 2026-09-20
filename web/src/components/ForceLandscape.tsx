@@ -15,7 +15,11 @@ export default function ForceLandscape({ children }: { children: ReactNode }) {
   const shouldRotate = isMobile && orientation === "portrait";
 
   if (!shouldRotate) {
-    return <>{children}</>;
+    // Establishes the same "real viewport size" container the rotated path below
+    // does, so children can size themselves with `h-full` in both cases instead of
+    // `h-dvh` — which would ignore the rotated container's swapped dimensions and
+    // size against the true (unrotated) device height, pushing content off-canvas.
+    return <div className="w-full h-dvh">{children}</div>;
   }
 
   return (
