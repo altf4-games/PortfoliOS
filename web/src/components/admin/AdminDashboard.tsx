@@ -21,6 +21,10 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
   const [kvConfigured, setKvConfigured] = useState(true);
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  // Kept separate from data.projectOverrides.excluded so the field can hold a comma the
+  // user just typed, mid-edit, without it being immediately stripped by the trim/filter
+  // pass — the input's displayed value must be the raw text, not the reprocessed array.
+  const [excludedText, setExcludedText] = useState("");
 
   useEffect(() => {
     fetch("/api/admin/content")
@@ -28,6 +32,7 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
       .then((body) => {
         setData(body.data);
         setKvConfigured(body.kvConfigured);
+        setExcludedText(body.data.projectOverrides.excluded.join(", "));
       });
   }, []);
 
@@ -424,16 +429,17 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
         <Field label="Excluded repo names (comma-separated)">
           <input
             className={inputClass}
-            value={data.projectOverrides.excluded.join(", ")}
-            onChange={(e) =>
+            value={excludedText}
+            onChange={(e) => {
+              setExcludedText(e.target.value);
               setData({
                 ...data,
                 projectOverrides: {
                   ...data.projectOverrides,
                   excluded: e.target.value.split(",").map((s) => s.trim()).filter(Boolean),
                 },
-              })
-            }
+              });
+            }}
           />
         </Field>
         <p className="text-xs text-white/40">

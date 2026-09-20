@@ -42,7 +42,7 @@ export default function Home() {
 
         <div
           className={`absolute inset-0 transition-opacity duration-500 ${
-            mode === "os" ? "opacity-100" : "opacity-0 pointer-events-none"
+            mode === "os" ? "opacity-100" : "invisible opacity-0 pointer-events-none"
           }`}
         >
           <Desktop />

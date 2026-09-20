@@ -15,8 +15,11 @@ import { TerminalIcon } from "./icons";
 
 export default function Desktop() {
   const windowOrder = useAppStore((s) => s.windowOrder);
+  const windows = useAppStore((s) => s.windows);
   const toggleMode = useAppStore((s) => s.toggleMode);
   const isMobile = useIsMobile();
+
+  const anyMaximized = windowOrder.some((id) => windows[id]?.maximized);
 
   return (
     <div className="absolute inset-0 overflow-hidden">
@@ -52,21 +55,22 @@ export default function Desktop() {
         )}
       </div>
 
-      <Dock />
+      {!anyMaximized && <Dock />}
 
-      {isMobile ? (
-        <button
-          onClick={toggleMode}
-          className="pointer-events-auto absolute bottom-20 right-4 z-40 flex items-center gap-1.5 rounded-full bg-black/50 border border-white/15 backdrop-blur-xl px-3.5 py-2 text-xs text-white/90 shadow-lg"
-        >
-          Explore the room
-        </button>
-      ) : (
-        <p className="pointer-events-none absolute bottom-3 left-4 z-40 text-[11px] text-white/50 font-mono">
-          Press <kbd className="px-1 py-0.5 rounded bg-white/10 border border-white/15 text-white/70">Esc</kbd> to
-          explore the room
-        </p>
-      )}
+      {!anyMaximized &&
+        (isMobile ? (
+          <button
+            onClick={toggleMode}
+            className="pointer-events-auto absolute bottom-20 right-4 z-40 flex items-center gap-1.5 rounded-full bg-black/50 border border-white/15 backdrop-blur-xl px-3.5 py-2 text-xs text-white/90 shadow-lg"
+          >
+            Explore the room
+          </button>
+        ) : (
+          <p className="pointer-events-none absolute bottom-3 left-4 z-40 text-[11px] text-white/50 font-mono">
+            Press <kbd className="px-1 py-0.5 rounded bg-white/10 border border-white/15 text-white/70">Esc</kbd> to
+            explore the room
+          </p>
+        ))}
     </div>
   );
 }
