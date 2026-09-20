@@ -22,6 +22,7 @@ export interface HackathonEntry {
 }
 
 export interface CustomProject {
+  id: string;
   name: string;
   description: string;
   html_url: string;

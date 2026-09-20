@@ -448,6 +448,96 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
         </p>
       </section>
 
+      {/* Custom projects */}
+      <section className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-cyan-300">Custom Projects</h2>
+          <button
+            className="text-xs text-cyan-300 hover:text-cyan-200"
+            onClick={() =>
+              setData({
+                ...data,
+                projectOverrides: {
+                  ...data.projectOverrides,
+                  custom: [
+                    ...data.projectOverrides.custom,
+                    { id: crypto.randomUUID(), name: "", description: "", html_url: "", language: "", homepage: "" },
+                  ],
+                },
+              })
+            }
+          >
+            + Add
+          </button>
+        </div>
+        <p className="text-xs text-white/40">
+          Show up alongside your GitHub projects without needing a live GitHub token — useful for
+          repos not yet pinned, private work, or anything hosted elsewhere.
+        </p>
+        <div className="space-y-3">
+          {data.projectOverrides.custom.map((proj, i) => {
+            const updateProject = (patch: Partial<typeof proj>) => {
+              const next = [...data.projectOverrides.custom];
+              next[i] = { ...proj, ...patch };
+              setData({ ...data, projectOverrides: { ...data.projectOverrides, custom: next } });
+            };
+            return (
+              <div key={proj.id} className="space-y-2 bg-white/5 rounded-md p-2">
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    className={inputClass}
+                    placeholder="Name"
+                    value={proj.name}
+                    onChange={(e) => updateProject({ name: e.target.value })}
+                  />
+                  <input
+                    className={inputClass}
+                    placeholder="Language (e.g. TypeScript)"
+                    value={proj.language ?? ""}
+                    onChange={(e) => updateProject({ language: e.target.value })}
+                  />
+                </div>
+                <textarea
+                  className={inputClass}
+                  rows={2}
+                  placeholder="Description"
+                  value={proj.description}
+                  onChange={(e) => updateProject({ description: e.target.value })}
+                />
+                <div className="grid grid-cols-[1fr_1fr_auto] gap-2">
+                  <input
+                    className={inputClass}
+                    placeholder="Repo/source URL"
+                    value={proj.html_url}
+                    onChange={(e) => updateProject({ html_url: e.target.value })}
+                  />
+                  <input
+                    className={inputClass}
+                    placeholder="Live URL (optional)"
+                    value={proj.homepage ?? ""}
+                    onChange={(e) => updateProject({ homepage: e.target.value })}
+                  />
+                  <button
+                    className="text-red-400 hover:text-red-300 text-xs px-2"
+                    onClick={() =>
+                      setData({
+                        ...data,
+                        projectOverrides: {
+                          ...data.projectOverrides,
+                          custom: data.projectOverrides.custom.filter((_, idx) => idx !== i),
+                        },
+                      })
+                    }
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
       <div className="sticky bottom-0 bg-[#0a0a0c] pt-4 pb-2 flex items-center gap-3 border-t border-white/10">
         <button
           onClick={save}

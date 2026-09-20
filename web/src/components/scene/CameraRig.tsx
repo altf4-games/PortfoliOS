@@ -17,7 +17,7 @@ import { useAppStore } from "@/store/useAppStore";
 // yaw/pitch offset) so it looks straight ahead at the desk/monitor from that point.
 // TUNE THESE if the framing lands awkwardly after any future changes to the room model:
 const CAMERA_POSITION = new THREE.Vector3(-5.75, 10.95, -9.15);
-const EXPLORE_YAW = 0;
+const EXPLORE_YAW = 1.5;
 const EXPLORE_PITCH = 0;
 const OS_YAW = 0;
 const OS_PITCH = 0;
