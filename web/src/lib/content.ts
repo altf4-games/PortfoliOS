@@ -18,6 +18,7 @@ function mergeWithDefaults(override: Partial<SiteData> | null): SiteData {
     techStack: override.techStack ?? DEFAULTS.techStack,
     achievements: override.achievements ?? DEFAULTS.achievements,
     hackathons: override.hackathons ?? DEFAULTS.hackathons,
+    oss: override.oss ?? DEFAULTS.oss,
     projectOverrides: { ...DEFAULTS.projectOverrides, ...override.projectOverrides },
   };
 }

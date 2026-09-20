@@ -89,6 +89,36 @@
       "isWinner": false
     }
   ],
+  "oss": [
+    {
+      "id": "data-formulator-351",
+      "repo": "microsoft/data-formulator",
+      "repoUrl": "https://github.com/microsoft/data-formulator",
+      "prNumber": "351",
+      "prUrl": "https://github.com/microsoft/data-formulator/pull/351"
+    },
+    {
+      "id": "data-formulator-436",
+      "repo": "microsoft/data-formulator",
+      "repoUrl": "https://github.com/microsoft/data-formulator",
+      "prNumber": "436",
+      "prUrl": "https://github.com/microsoft/data-formulator/pull/436"
+    },
+    {
+      "id": "apm-1367",
+      "repo": "microsoft/apm",
+      "repoUrl": "https://github.com/microsoft/apm",
+      "prNumber": "1367",
+      "prUrl": "https://github.com/microsoft/apm/pull/1367"
+    },
+    {
+      "id": "ultralytics-25824",
+      "repo": "ultralytics/ultralytics",
+      "repoUrl": "https://github.com/ultralytics/ultralytics",
+      "prNumber": "25824",
+      "prUrl": "https://github.com/ultralytics/ultralytics/pull/25824"
+    }
+  ],
   "projectOverrides": {
     "included": [],
     "featured": [],

@@ -24,6 +24,14 @@ export interface HackathonEntry {
   isWinner: boolean;
 }
 
+export interface OssContribution {
+  id: string;
+  repo: string; // e.g. "microsoft/data-formulator"
+  repoUrl: string;
+  prNumber: string; // e.g. "351"
+  prUrl: string;
+}
+
 export interface CustomProject {
   id: string;
   name: string;
@@ -52,6 +60,7 @@ export interface SiteData {
   techStack: Record<string, string>;
   achievements: string[];
   hackathons: HackathonEntry[];
+  oss: OssContribution[];
   projectOverrides: {
     included: string[];
     featured: string[];

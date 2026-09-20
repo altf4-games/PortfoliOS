@@ -3,7 +3,7 @@ import { persist } from "zustand/middleware";
 import { DEFAULT_WALLPAPER_ID } from "@/lib/wallpapers";
 
 export type Mode = "os" | "explore";
-export type WindowId = "terminal" | "projects" | "hackathons" | "settings";
+export type WindowId = "terminal" | "projects" | "hackathons" | "oss" | "settings";
 
 export interface Rect {
   x: number;
@@ -16,6 +16,7 @@ const DEFAULT_RECTS: Record<WindowId, Rect> = {
   terminal: { x: 80, y: 72, width: 620, height: 420 },
   projects: { x: 160, y: 110, width: 640, height: 460 },
   hackathons: { x: 220, y: 90, width: 480, height: 440 },
+  oss: { x: 240, y: 100, width: 480, height: 440 },
   settings: { x: 260, y: 130, width: 420, height: 380 },
 };
 

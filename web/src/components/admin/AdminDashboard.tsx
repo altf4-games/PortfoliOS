@@ -467,6 +467,117 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
         </div>
       </section>
 
+      {/* Open Source Contributions */}
+      <section className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-cyan-300">Open Source Contributions</h2>
+          <button
+            type="button"
+            className="text-xs text-cyan-300 hover:text-cyan-200"
+            onClick={() =>
+              setData({
+                ...data,
+                oss: [
+                  ...data.oss,
+                  { id: crypto.randomUUID(), repo: "", repoUrl: "", prNumber: "", prUrl: "" },
+                ],
+              })
+            }
+          >
+            + Add
+          </button>
+        </div>
+        <p className="text-xs text-white/40">
+          Use the arrows to reorder. Add one row per PR — rows with the same repo are grouped together on display.
+        </p>
+        <div className="space-y-3">
+          {data.oss.map((c, i) => {
+            const moveBy = (delta: number) => {
+              const j = i + delta;
+              if (j < 0 || j >= data.oss.length) return;
+              const next = [...data.oss];
+              [next[i], next[j]] = [next[j], next[i]];
+              setData({ ...data, oss: next });
+            };
+            return (
+              <div key={c.id} className="flex items-start gap-2 bg-white/5 rounded-md p-2">
+                <div className="flex flex-col gap-0.5 pt-0.5 shrink-0">
+                  <button
+                    type="button"
+                    className="text-white/50 hover:text-white disabled:opacity-20 disabled:hover:text-white/50 text-xs leading-none px-1"
+                    onClick={() => moveBy(-1)}
+                    disabled={i === 0}
+                    aria-label="Move up"
+                  >
+                    ▲
+                  </button>
+                  <button
+                    type="button"
+                    className="text-white/50 hover:text-white disabled:opacity-20 disabled:hover:text-white/50 text-xs leading-none px-1"
+                    onClick={() => moveBy(1)}
+                    disabled={i === data.oss.length - 1}
+                    aria-label="Move down"
+                  >
+                    ▼
+                  </button>
+                </div>
+
+                <div className="flex-1 min-w-0 grid grid-cols-2 gap-2">
+                  <input
+                    className={inputClass}
+                    placeholder="Repo (e.g. microsoft/data-formulator)"
+                    value={c.repo}
+                    onChange={(e) => {
+                      const next = [...data.oss];
+                      next[i] = { ...c, repo: e.target.value };
+                      setData({ ...data, oss: next });
+                    }}
+                  />
+                  <input
+                    className={inputClass}
+                    placeholder="Repo URL"
+                    value={c.repoUrl}
+                    onChange={(e) => {
+                      const next = [...data.oss];
+                      next[i] = { ...c, repoUrl: e.target.value };
+                      setData({ ...data, oss: next });
+                    }}
+                  />
+                  <input
+                    className={inputClass}
+                    placeholder="PR number (e.g. 351)"
+                    value={c.prNumber}
+                    onChange={(e) => {
+                      const next = [...data.oss];
+                      next[i] = { ...c, prNumber: e.target.value };
+                      setData({ ...data, oss: next });
+                    }}
+                  />
+                  <input
+                    className={inputClass}
+                    placeholder="PR URL"
+                    value={c.prUrl}
+                    onChange={(e) => {
+                      const next = [...data.oss];
+                      next[i] = { ...c, prUrl: e.target.value };
+                      setData({ ...data, oss: next });
+                    }}
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  className="text-red-400 hover:text-red-300 text-xs px-2 py-2 shrink-0"
+                  onClick={() => setData({ ...data, oss: data.oss.filter((_, idx) => idx !== i) })}
+                >
+                  Remove
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
       {/* Achievements */}
       <section className="space-y-3">
         <h2 className="text-sm font-semibold text-cyan-300">Achievements</h2>

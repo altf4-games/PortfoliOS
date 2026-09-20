@@ -84,6 +84,7 @@ export default function Terminal() {
         print("skills      - View my technical skills");
         print("achievements - View my achievements");
         print("hackathons  - View hackathon wins");
+        print("oss         - View open source contributions");
         print("projects    - Open the projects window");
         print("linkedin    - Open my LinkedIn profile");
         print("github      - Open my GitHub profile");
@@ -142,6 +143,19 @@ export default function Terminal() {
         site?.hackathons.forEach((h) => print(`${h.date} - ${h.title}: ${h.result}`));
         if (!isMobile) openWindow("hackathons");
         break;
+      case "oss": {
+        print("Open Source Contributions:");
+        print("-------------------");
+        const byRepo = new Map<string, string[]>();
+        site?.oss.forEach((c) => {
+          const prs = byRepo.get(c.repo) ?? [];
+          prs.push(`#${c.prNumber}`);
+          byRepo.set(c.repo, prs);
+        });
+        byRepo.forEach((prs, repo) => print(`${repo}: ${prs.join(", ")}`));
+        if (!isMobile) openWindow("oss");
+        break;
+      }
       case "projects":
         print("Fetching pinned projects...");
         fetch("/api/github-pinned")

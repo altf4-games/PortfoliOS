@@ -10,6 +10,7 @@ import WindowFrame from "./WindowFrame";
 import Terminal from "./Terminal";
 import ProjectsWindow from "./ProjectsWindow";
 import HackathonsWindow from "./HackathonsWindow";
+import OssWindow from "./OssWindow";
 import SettingsWindow from "./SettingsWindow";
 import { TerminalIcon } from "./icons";
 
@@ -59,6 +60,11 @@ export default function Desktop() {
         {windowOrder.includes("hackathons") && (
           <WindowFrame id="hackathons" title="Hackathons">
             <HackathonsWindow />
+          </WindowFrame>
+        )}
+        {windowOrder.includes("oss") && (
+          <WindowFrame id="oss" title="Open Source">
+            <OssWindow />
           </WindowFrame>
         )}
         {windowOrder.includes("settings") && (
