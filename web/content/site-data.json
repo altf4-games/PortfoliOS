@@ -87,7 +87,7 @@
     }
   ],
   "projectOverrides": {
-    "excluded": [],
+    "included": [],
     "featured": [],
     "custom": []
   }

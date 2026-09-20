@@ -7,9 +7,11 @@ export const revalidate = 3600;
 export async function GET() {
   const site = await getSiteData();
   const repos = await fetchPinnedRepos(site.profile.githubUsername);
-  const excluded = new Set(site.projectOverrides.excluded);
+  const included = site.projectOverrides.included;
 
-  const filtered = repos.filter((r) => !excluded.has(r.name));
+  // An empty include list means "show everything GitHub has pinned"; once populated,
+  // it acts as an allowlist rather than a list of names to hide.
+  const filtered = included.length === 0 ? repos : repos.filter((r) => included.includes(r.name));
   const combined = [...filtered, ...site.projectOverrides.custom.map((c) => ({
     name: c.name,
     description: c.description,

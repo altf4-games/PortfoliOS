@@ -21,10 +21,10 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
   const [kvConfigured, setKvConfigured] = useState(true);
   const [status, setStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
-  // Kept separate from data.projectOverrides.excluded so the field can hold a comma the
+  // Kept separate from data.projectOverrides.included so the field can hold a comma the
   // user just typed, mid-edit, without it being immediately stripped by the trim/filter
   // pass — the input's displayed value must be the raw text, not the reprocessed array.
-  const [excludedText, setExcludedText] = useState("");
+  const [includedText, setIncludedText] = useState("");
 
   useEffect(() => {
     fetch("/api/admin/content")
@@ -32,7 +32,7 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
       .then((body) => {
         setData(body.data);
         setKvConfigured(body.kvConfigured);
-        setExcludedText(body.data.projectOverrides.excluded.join(", "));
+        setIncludedText(body.data.projectOverrides.included.join(", "));
       });
   }, []);
 
@@ -426,24 +426,25 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
       {/* Project overrides */}
       <section className="space-y-3">
         <h2 className="text-sm font-semibold text-cyan-300">GitHub Pinned Projects — Overrides</h2>
-        <Field label="Excluded repo names (comma-separated)">
+        <Field label="Include repo names (comma-separated)">
           <input
             className={inputClass}
-            value={excludedText}
+            value={includedText}
             onChange={(e) => {
-              setExcludedText(e.target.value);
+              setIncludedText(e.target.value);
               setData({
                 ...data,
                 projectOverrides: {
                   ...data.projectOverrides,
-                  excluded: e.target.value.split(",").map((s) => s.trim()).filter(Boolean),
+                  included: e.target.value.split(",").map((s) => s.trim()).filter(Boolean),
                 },
               });
             }}
           />
         </Field>
         <p className="text-xs text-white/40">
-          Pinned repos are pulled live from GitHub. List names here to hide any from the site.
+          Pinned repos are pulled live from GitHub. Leave blank to show everything pinned, or list
+          specific repo names here to show only those.
         </p>
       </section>
 

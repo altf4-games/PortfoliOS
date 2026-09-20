@@ -49,7 +49,7 @@ export interface SiteData {
   achievements: string[];
   hackathons: HackathonEntry[];
   projectOverrides: {
-    excluded: string[];
+    included: string[];
     featured: string[];
     custom: CustomProject[];
   };
