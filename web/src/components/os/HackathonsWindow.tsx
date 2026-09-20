@@ -1,28 +1,49 @@
 "use client";
 
 import { useSiteData } from "@/lib/useSiteData";
+import { TrophyIcon } from "./icons";
 
 export default function HackathonsWindow() {
   const site = useSiteData();
 
+  if (!site) {
+    return <p className="p-4 text-white/50 text-sm">Loading...</p>;
+  }
+
   return (
-    <div className="p-3 text-white">
-      {!site && <p className="text-white/50 text-sm">Loading...</p>}
-      <ol className="relative border-l border-white/10 ml-2 space-y-4">
-        {site?.hackathons.map((h) => (
-          <li key={h.id} className="ml-4">
-            <div className="absolute w-2 h-2 rounded-full bg-cyan-400 -translate-x-[4.5px] mt-1.5" />
-            <time className="text-[11px] text-white/40">{h.date}</time>
-            <h3 className="text-sm font-semibold">{h.title}</h3>
-            <p className="text-xs text-cyan-300/80">{h.result}</p>
+    <div className="p-3 space-y-2.5">
+      {site.hackathons.map((h) => (
+        <div
+          key={h.id}
+          className="flex items-start gap-3 rounded-lg bg-white/5 border border-white/10 p-3 hover:bg-white/[0.08] hover:border-white/15 transition-colors"
+        >
+          <span className="shrink-0 w-9 h-9 rounded-full bg-gradient-to-br from-amber-400/20 to-cyan-400/20 border border-white/10 flex items-center justify-center text-amber-300">
+            <TrophyIcon className="w-4.5 h-4.5" />
+          </span>
+
+          <div className="min-w-0 flex-1">
+            <div className="flex items-start justify-between gap-2">
+              <h3 className="text-sm font-semibold text-white leading-snug">{h.title}</h3>
+              <time className="shrink-0 text-[11px] text-white/40 pt-0.5">{h.date}</time>
+            </div>
+            <p className="text-xs text-cyan-300/90 mt-1 font-medium">{h.result}</p>
             {h.url && (
-              <a href={h.url} target="_blank" rel="noreferrer" className="text-[11px] text-white/50 underline">
-                View
+              <a
+                href={h.url}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-block mt-1.5 text-[11px] text-white/50 hover:text-white transition-colors"
+              >
+                View details →
               </a>
             )}
-          </li>
-        ))}
-      </ol>
+          </div>
+        </div>
+      ))}
+
+      {site.hackathons.length === 0 && (
+        <p className="text-white/40 text-sm text-center py-6">No hackathon wins added yet.</p>
+      )}
     </div>
   );
 }
