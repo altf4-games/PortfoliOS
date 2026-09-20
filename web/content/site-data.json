@@ -69,21 +69,24 @@
       "title": "8th Wall Forge the Future Game Jam",
       "result": "Won Most Addictive Game",
       "date": "2025",
-      "url": ""
+      "url": "",
+      "isWinner": true
     },
     {
       "id": "ilh-pune-web3",
       "title": "I Love Hackathon Pune - Web3 Edition",
       "result": "Top 10",
       "date": "2025",
-      "url": ""
+      "url": "",
+      "isWinner": false
     },
     {
       "id": "kjsse-hack8",
       "title": "KJSSE Hack 8",
       "result": "Top 6",
       "date": "2025",
-      "url": ""
+      "url": "",
+      "isWinner": false
     }
   ],
   "projectOverrides": {

@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useAppStore } from "@/store/useAppStore";
 import { useSiteData } from "@/lib/useSiteData";
+import { useIsMobile } from "@/lib/useIsMobile";
+import type { GithubRepo } from "@/lib/types";
 
 const PROMPT = "pradyum@altf4-os:~$";
 const HISTORY_KEY = "portfolios-terminal-history";
@@ -26,6 +28,7 @@ export default function Terminal() {
   const toggleMode = useAppStore((s) => s.toggleMode);
   const openWindow = useAppStore((s) => s.openWindow);
   const closeWindow = useAppStore((s) => s.closeWindow);
+  const isMobile = useIsMobile();
 
   const [lines, setLines] = useState<Line[]>([
     { text: "===========================================", kind: "output" },
@@ -137,12 +140,25 @@ export default function Terminal() {
         print("Hackathon Wins:");
         print("-------------------");
         site?.hackathons.forEach((h) => print(`${h.date} - ${h.title}: ${h.result}`));
-        openWindow("hackathons");
+        if (!isMobile) openWindow("hackathons");
         break;
       case "projects":
-        print("Opening projects window...");
-        openWindow("projects");
-        break;
+        print("Fetching pinned projects...");
+        fetch("/api/github-pinned")
+          .then((r) => r.json())
+          .then((repos: GithubRepo[]) => {
+            print("");
+            print("Projects:");
+            print("-------------------");
+            repos.forEach((r) => {
+              print(`${r.name}${r.language ? ` (${r.language})` : ""}`);
+              if (r.description) print(`  ${r.description}`);
+              print(`  ${r.html_url}`);
+              print("");
+            });
+          });
+        if (!isMobile) openWindow("projects");
+        return;
       case "linkedin":
         print("Opening LinkedIn profile...");
         if (site) window.open(site.profile.linkedinUrl, "_blank");
@@ -177,11 +193,19 @@ export default function Terminal() {
         setTimeout(() => window.location.reload(), 900);
         break;
       case "exit":
+        if (isMobile) {
+          print("This is a terminal-only view on mobile — there's nothing to close.");
+          break;
+        }
         print("Closing terminal...");
         print("Goodbye!");
         setTimeout(() => closeWindow("terminal"), 400);
         break;
       case "escape":
+        if (isMobile) {
+          print("Explore mode isn't available on mobile — this is a terminal-only view.");
+          break;
+        }
         toggleMode();
         return;
       case "uname":

@@ -19,6 +19,9 @@ export interface HackathonEntry {
   result: string;
   date: string;
   url?: string;
+  // true = an outright win, false = a placement short of winning (finalist, top N, etc.).
+  // Drives which icon/color the entry gets on the Hackathons window.
+  isWinner: boolean;
 }
 
 export interface CustomProject {

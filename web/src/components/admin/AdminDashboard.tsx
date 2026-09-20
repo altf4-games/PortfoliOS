@@ -345,7 +345,7 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
                 ...data,
                 hackathons: [
                   ...data.hackathons,
-                  { id: crypto.randomUUID(), title: "", result: "", date: "", url: "" },
+                  { id: crypto.randomUUID(), title: "", result: "", date: "", url: "", isWinner: true },
                 ],
               })
             }
@@ -353,47 +353,116 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
             + Add
           </button>
         </div>
+        <p className="text-xs text-white/40">Use the arrows to reorder. Toggle Win / Finalist to control the icon shown.</p>
         <div className="space-y-3">
-          {data.hackathons.map((h, i) => (
-            <div key={h.id} className="grid grid-cols-[1fr_1fr_auto_auto] gap-2 items-start bg-white/5 rounded-md p-2">
-              <input
-                className={inputClass}
-                placeholder="Title"
-                value={h.title}
-                onChange={(e) => {
-                  const next = [...data.hackathons];
-                  next[i] = { ...h, title: e.target.value };
-                  setData({ ...data, hackathons: next });
-                }}
-              />
-              <input
-                className={inputClass}
-                placeholder="Result (e.g. Won 1st)"
-                value={h.result}
-                onChange={(e) => {
-                  const next = [...data.hackathons];
-                  next[i] = { ...h, result: e.target.value };
-                  setData({ ...data, hackathons: next });
-                }}
-              />
-              <input
-                className={`${inputClass} w-24`}
-                placeholder="Date"
-                value={h.date}
-                onChange={(e) => {
-                  const next = [...data.hackathons];
-                  next[i] = { ...h, date: e.target.value };
-                  setData({ ...data, hackathons: next });
-                }}
-              />
-              <button
-                className="text-red-400 hover:text-red-300 text-xs px-2 py-2"
-                onClick={() => setData({ ...data, hackathons: data.hackathons.filter((_, idx) => idx !== i) })}
-              >
-                Remove
-              </button>
-            </div>
-          ))}
+          {data.hackathons.map((h, i) => {
+            const isWinner = h.isWinner ?? true;
+            const moveBy = (delta: number) => {
+              const j = i + delta;
+              if (j < 0 || j >= data.hackathons.length) return;
+              const next = [...data.hackathons];
+              [next[i], next[j]] = [next[j], next[i]];
+              setData({ ...data, hackathons: next });
+            };
+            return (
+              <div key={h.id} className="space-y-2 bg-white/5 rounded-md p-2">
+                <div className="grid grid-cols-[auto_1fr_1fr_auto] gap-2 items-start">
+                  <div className="flex flex-col gap-0.5 pt-0.5">
+                    <button
+                      className="text-white/50 hover:text-white disabled:opacity-20 disabled:hover:text-white/50 text-xs leading-none px-1"
+                      onClick={() => moveBy(-1)}
+                      disabled={i === 0}
+                      aria-label="Move up"
+                    >
+                      ▲
+                    </button>
+                    <button
+                      className="text-white/50 hover:text-white disabled:opacity-20 disabled:hover:text-white/50 text-xs leading-none px-1"
+                      onClick={() => moveBy(1)}
+                      disabled={i === data.hackathons.length - 1}
+                      aria-label="Move down"
+                    >
+                      ▼
+                    </button>
+                  </div>
+                  <input
+                    className={inputClass}
+                    placeholder="Title"
+                    value={h.title}
+                    onChange={(e) => {
+                      const next = [...data.hackathons];
+                      next[i] = { ...h, title: e.target.value };
+                      setData({ ...data, hackathons: next });
+                    }}
+                  />
+                  <input
+                    className={inputClass}
+                    placeholder="Result (e.g. Top 10)"
+                    value={h.result}
+                    onChange={(e) => {
+                      const next = [...data.hackathons];
+                      next[i] = { ...h, result: e.target.value };
+                      setData({ ...data, hackathons: next });
+                    }}
+                  />
+                  <button
+                    className="text-red-400 hover:text-red-300 text-xs px-2 py-2"
+                    onClick={() => setData({ ...data, hackathons: data.hackathons.filter((_, idx) => idx !== i) })}
+                  >
+                    Remove
+                  </button>
+                </div>
+                <div className="flex items-center gap-3 pl-7">
+                  <input
+                    className={`${inputClass} w-24`}
+                    placeholder="Date"
+                    value={h.date}
+                    onChange={(e) => {
+                      const next = [...data.hackathons];
+                      next[i] = { ...h, date: e.target.value };
+                      setData({ ...data, hackathons: next });
+                    }}
+                  />
+                  <div className="flex rounded-md overflow-hidden border border-white/10 text-xs">
+                    <button
+                      className={`px-3 py-1.5 transition-colors ${
+                        isWinner ? "bg-amber-400/20 text-amber-300" : "text-white/40 hover:text-white/70"
+                      }`}
+                      onClick={() => {
+                        const next = [...data.hackathons];
+                        next[i] = { ...h, isWinner: true };
+                        setData({ ...data, hackathons: next });
+                      }}
+                    >
+                      🏆 Win
+                    </button>
+                    <button
+                      className={`px-3 py-1.5 transition-colors ${
+                        !isWinner ? "bg-slate-300/20 text-slate-300" : "text-white/40 hover:text-white/70"
+                      }`}
+                      onClick={() => {
+                        const next = [...data.hackathons];
+                        next[i] = { ...h, isWinner: false };
+                        setData({ ...data, hackathons: next });
+                      }}
+                    >
+                      🎖️ Finalist
+                    </button>
+                  </div>
+                  <input
+                    className={inputClass}
+                    placeholder="Link (optional)"
+                    value={h.url ?? ""}
+                    onChange={(e) => {
+                      const next = [...data.hackathons];
+                      next[i] = { ...h, url: e.target.value };
+                      setData({ ...data, hackathons: next });
+                    }}
+                  />
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
