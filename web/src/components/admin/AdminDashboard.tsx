@@ -32,7 +32,7 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
       .then((body) => {
         setData(body.data);
         setKvConfigured(body.kvConfigured);
-        setIncludedText(body.data.projectOverrides.included.join(", "));
+        setIncludedText((body.data.projectOverrides.included ?? []).join(", "));
       });
   }, []);
 
