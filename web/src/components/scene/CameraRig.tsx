@@ -4,23 +4,23 @@
 // That's incompatible with the React Compiler's purity/immutability lint rules below.
 /* eslint-disable react-hooks/immutability */
 
-import { useRef, useEffect, useMemo } from "react";
+import { useRef, useEffect } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import { useAppStore } from "@/store/useAppStore";
 
 // The original Unity scene positioned the camera by hand relative to a prefab whose
-// root transform isn't cleanly recoverable from the scene file, so instead of guessing
-// world-space numbers we auto-fit a sensible vantage point from the model's own geometry
-// at runtime, then this yaw/pitch was found by manually looking around from that point
-// until the gaming desk (monitors, PC, hex wall decor) was framed well. TUNE THESE if the
+// root transform isn't cleanly recoverable from the scene file (and the exported glb's
+// own optimization pass merged the chair/desk/monitor into a couple of whole-room meshes,
+// so they can't be found by name either). This position/yaw/pitch was instead found by
+// sitting in the live scene: walking the camera forward from a wide establishing shot
+// until it lands at the gaming chair, facing the desk and monitor. TUNE THESE if the
 // framing lands awkwardly after any future changes to the room model:
-const EYE_HEIGHT_ABOVE_FLOOR = 1.6;
+const CAMERA_POSITION = new THREE.Vector3(1.75, 1.95, -9.15);
 const EXPLORE_YAW = THREE.MathUtils.degToRad(119);
-const EXPLORE_PITCH = THREE.MathUtils.degToRad(12);
+const EXPLORE_PITCH = THREE.MathUtils.degToRad(8);
 const OS_YAW = THREE.MathUtils.degToRad(134);
-const OS_PITCH = THREE.MathUtils.degToRad(8);
+const OS_PITCH = THREE.MathUtils.degToRad(5);
 const PITCH_LIMIT = THREE.MathUtils.degToRad(80);
 
 const OS_FOV = 27;
@@ -30,13 +30,6 @@ const TWEEN_DURATION = 1; // seconds, matches Unity's tweenDuration
 export default function CameraRig() {
   const { camera, gl } = useThree();
   const mode = useAppStore((s) => s.mode);
-  const { scene } = useGLTF("/models/gaming_room.glb");
-
-  const cameraPosition = useMemo(() => {
-    const box = new THREE.Box3().setFromObject(scene);
-    const center = box.getCenter(new THREE.Vector3());
-    return new THREE.Vector3(center.x, box.min.y + EYE_HEIGHT_ABOVE_FLOOR, center.z);
-  }, [scene]);
 
   const yaw = useRef(EXPLORE_YAW);
   const pitch = useRef(EXPLORE_PITCH);
@@ -49,8 +42,8 @@ export default function CameraRig() {
   const tweening = useRef(false);
 
   useEffect(() => {
-    camera.position.copy(cameraPosition);
-  }, [camera, cameraPosition]);
+    camera.position.copy(CAMERA_POSITION);
+  }, [camera]);
 
   useEffect(() => {
     tweenFrom.current = { yaw: yaw.current, pitch: pitch.current, fov: (camera as THREE.PerspectiveCamera).fov };
