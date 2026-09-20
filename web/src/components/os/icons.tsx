@@ -82,6 +82,14 @@ export function SteamIcon({ className }: { className?: string }) {
   );
 }
 
+export function PullRequestIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 16 16" className={className} fill="currentColor" aria-hidden="true">
+      <path d="M2.5 3.25a1.75 1.75 0 1 1 2.5 1.58v6.34a1.75 1.75 0 1 1-1.5 0V4.83a1.75 1.75 0 0 1-1-1.58Zm7.35 8.5a1.75 1.75 0 1 1-1.5-.02V9.5A2 2 0 0 1 6.5 7.5V5.06a1.75 1.75 0 1 1 1.5 0V7.5a.5.5 0 0 0 .5.5h1.85l-1.55-1.55a.75.75 0 0 1 1.06-1.06l2.83 2.83a.75.75 0 0 1 0 1.06l-2.83 2.83a.75.75 0 1 1-1.06-1.06l1.55-1.55H8.5a3.5 3.5 0 0 1-.65-.06Z" />
+    </svg>
+  );
+}
+
 export function ResumeIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
