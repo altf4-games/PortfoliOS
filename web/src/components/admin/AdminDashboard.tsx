@@ -154,6 +154,7 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-semibold text-cyan-300">Education</h2>
           <button
+            type="button"
             className="text-xs text-cyan-300 hover:text-cyan-200"
             onClick={() =>
               setData({
@@ -215,6 +216,7 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
                   }}
                 />
                 <button
+                  type="button"
                   className="text-red-400 hover:text-red-300 text-xs px-2"
                   onClick={() => setData({ ...data, education: data.education.filter((_, idx) => idx !== i) })}
                 >
@@ -231,6 +233,7 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-semibold text-cyan-300">Work Experience</h2>
           <button
+            type="button"
             className="text-xs text-cyan-300 hover:text-cyan-200"
             onClick={() =>
               setData({
@@ -276,6 +279,7 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
                 }}
               />
               <button
+                type="button"
                 className="text-red-400 hover:text-red-300 text-xs px-2 py-2"
                 onClick={() => setData({ ...data, experience: data.experience.filter((_, idx) => idx !== i) })}
               >
@@ -291,6 +295,7 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-semibold text-cyan-300">Tech Stack</h2>
           <button
+            type="button"
             className="text-xs text-cyan-300 hover:text-cyan-200"
             onClick={() => setData({ ...data, techStack: { ...data.techStack, "New Category": "" } })}
           >
@@ -321,6 +326,7 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
                 }}
               />
               <button
+                type="button"
                 className="text-red-400 hover:text-red-300 text-xs px-2"
                 onClick={() => {
                   const entries = Object.entries(data.techStack).filter((_, idx) => idx !== i);
@@ -365,26 +371,29 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
               setData({ ...data, hackathons: next });
             };
             return (
-              <div key={h.id} className="space-y-2 bg-white/5 rounded-md p-2">
-                <div className="grid grid-cols-[auto_1fr_1fr_auto] gap-2 items-start">
-                  <div className="flex flex-col gap-0.5 pt-0.5">
-                    <button
-                      className="text-white/50 hover:text-white disabled:opacity-20 disabled:hover:text-white/50 text-xs leading-none px-1"
-                      onClick={() => moveBy(-1)}
-                      disabled={i === 0}
-                      aria-label="Move up"
-                    >
-                      ▲
-                    </button>
-                    <button
-                      className="text-white/50 hover:text-white disabled:opacity-20 disabled:hover:text-white/50 text-xs leading-none px-1"
-                      onClick={() => moveBy(1)}
-                      disabled={i === data.hackathons.length - 1}
-                      aria-label="Move down"
-                    >
-                      ▼
-                    </button>
-                  </div>
+              <div key={h.id} className="flex items-start gap-2 bg-white/5 rounded-md p-2">
+                <div className="flex flex-col gap-0.5 pt-0.5 shrink-0">
+                  <button
+                    type="button"
+                    className="text-white/50 hover:text-white disabled:opacity-20 disabled:hover:text-white/50 text-xs leading-none px-1"
+                    onClick={() => moveBy(-1)}
+                    disabled={i === 0}
+                    aria-label="Move up"
+                  >
+                    ▲
+                  </button>
+                  <button
+                    type="button"
+                    className="text-white/50 hover:text-white disabled:opacity-20 disabled:hover:text-white/50 text-xs leading-none px-1"
+                    onClick={() => moveBy(1)}
+                    disabled={i === data.hackathons.length - 1}
+                    aria-label="Move down"
+                  >
+                    ▼
+                  </button>
+                </div>
+
+                <div className="flex-1 min-w-0 grid grid-cols-2 gap-2">
                   <input
                     className={inputClass}
                     placeholder="Title"
@@ -405,16 +414,8 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
                       setData({ ...data, hackathons: next });
                     }}
                   />
-                  <button
-                    className="text-red-400 hover:text-red-300 text-xs px-2 py-2"
-                    onClick={() => setData({ ...data, hackathons: data.hackathons.filter((_, idx) => idx !== i) })}
-                  >
-                    Remove
-                  </button>
-                </div>
-                <div className="flex items-center gap-3 pl-7">
                   <input
-                    className={`${inputClass} w-24`}
+                    className={inputClass}
                     placeholder="Date"
                     value={h.date}
                     onChange={(e) => {
@@ -423,9 +424,10 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
                       setData({ ...data, hackathons: next });
                     }}
                   />
-                  <div className="flex rounded-md overflow-hidden border border-white/10 text-xs">
+                  <div className="flex rounded-md overflow-hidden border border-white/10 text-xs divide-x divide-white/10">
                     <button
-                      className={`px-3 py-1.5 transition-colors ${
+                      type="button"
+                      className={`flex-1 px-3 py-2 transition-colors ${
                         isWinner ? "bg-amber-400/20 text-amber-300" : "text-white/40 hover:text-white/70"
                       }`}
                       onClick={() => {
@@ -437,7 +439,8 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
                       🏆 Win
                     </button>
                     <button
-                      className={`px-3 py-1.5 transition-colors ${
+                      type="button"
+                      className={`flex-1 px-3 py-2 transition-colors ${
                         !isWinner ? "bg-slate-300/20 text-slate-300" : "text-white/40 hover:text-white/70"
                       }`}
                       onClick={() => {
@@ -449,17 +452,15 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
                       🎖️ Finalist
                     </button>
                   </div>
-                  <input
-                    className={inputClass}
-                    placeholder="Link (optional)"
-                    value={h.url ?? ""}
-                    onChange={(e) => {
-                      const next = [...data.hackathons];
-                      next[i] = { ...h, url: e.target.value };
-                      setData({ ...data, hackathons: next });
-                    }}
-                  />
                 </div>
+
+                <button
+                  type="button"
+                  className="text-red-400 hover:text-red-300 text-xs px-2 py-2 shrink-0"
+                  onClick={() => setData({ ...data, hackathons: data.hackathons.filter((_, idx) => idx !== i) })}
+                >
+                  Remove
+                </button>
               </div>
             );
           })}
@@ -522,6 +523,7 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-semibold text-cyan-300">Custom Projects</h2>
           <button
+            type="button"
             className="text-xs text-cyan-300 hover:text-cyan-200"
             onClick={() =>
               setData({
@@ -587,6 +589,7 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
                     onChange={(e) => updateProject({ homepage: e.target.value })}
                   />
                   <button
+                    type="button"
                     className="text-red-400 hover:text-red-300 text-xs px-2"
                     onClick={() =>
                       setData({
@@ -609,6 +612,7 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
 
       <div className="sticky bottom-0 bg-[#0a0a0c] pt-4 pb-2 flex items-center gap-3 border-t border-white/10">
         <button
+          type="button"
           onClick={save}
           disabled={status === "saving"}
           className="rounded-md bg-cyan-500 hover:bg-cyan-400 disabled:opacity-50 text-black text-sm font-medium px-4 py-2 transition-colors"
