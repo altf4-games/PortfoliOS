@@ -4,11 +4,13 @@ import { useAppStore } from "@/store/useAppStore";
 import WallpaperLayer from "./WallpaperLayer";
 import MenuBar from "./MenuBar";
 import Dock from "./Dock";
+import DesktopIcons from "./DesktopIcons";
 import WindowFrame from "./WindowFrame";
 import Terminal from "./Terminal";
 import ProjectsWindow from "./ProjectsWindow";
 import HackathonsWindow from "./HackathonsWindow";
 import SettingsWindow from "./SettingsWindow";
+import { TerminalIcon } from "./icons";
 
 export default function Desktop() {
   const windowOrder = useAppStore((s) => s.windowOrder);
@@ -22,9 +24,11 @@ export default function Desktop() {
         <MenuBar />
       </div>
 
+      <DesktopIcons />
+
       <div className="relative flex-1">
         {windowOrder.includes("terminal") && (
-          <WindowFrame id="terminal" title="terminal — zsh" icon="⌘">
+          <WindowFrame id="terminal" title="terminal — zsh" icon={<TerminalIcon className="w-3.5 h-3.5" />}>
             <Terminal />
           </WindowFrame>
         )}

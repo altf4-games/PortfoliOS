@@ -120,6 +120,20 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
               onChange={(e) => setData({ ...data, profile: { ...data.profile, linkedinUrl: e.target.value } })}
             />
           </Field>
+          <Field label="Itch.io URL">
+            <input
+              className={inputClass}
+              value={data.profile.itchUrl}
+              onChange={(e) => setData({ ...data, profile: { ...data.profile, itchUrl: e.target.value } })}
+            />
+          </Field>
+          <Field label="Steam URL">
+            <input
+              className={inputClass}
+              value={data.profile.steamUrl}
+              onChange={(e) => setData({ ...data, profile: { ...data.profile, steamUrl: e.target.value } })}
+            />
+          </Field>
         </div>
       </section>
 

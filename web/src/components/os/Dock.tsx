@@ -1,12 +1,14 @@
 "use client";
 
+import { ReactNode } from "react";
 import { useAppStore, WindowId } from "@/store/useAppStore";
+import { TerminalIcon, ProjectsIcon, TrophyIcon, GearIcon } from "./icons";
 
-const DOCK_ITEMS: { id: WindowId; label: string; icon: string }[] = [
-  { id: "terminal", label: "Terminal", icon: "⌘" },
-  { id: "projects", label: "Projects", icon: "▦" },
-  { id: "hackathons", label: "Hackathons", icon: "◈" },
-  { id: "settings", label: "Settings", icon: "⚙" },
+const DOCK_ITEMS: { id: WindowId; label: string; icon: ReactNode }[] = [
+  { id: "terminal", label: "Terminal", icon: <TerminalIcon className="w-6 h-6" /> },
+  { id: "projects", label: "Projects", icon: <ProjectsIcon className="w-6 h-6" /> },
+  { id: "hackathons", label: "Hackathons", icon: <TrophyIcon className="w-6 h-6" /> },
+  { id: "settings", label: "Settings", icon: <GearIcon className="w-6 h-6" /> },
 ];
 
 export default function Dock() {
@@ -25,7 +27,7 @@ export default function Dock() {
               title={item.label}
               className="group relative flex flex-col items-center"
             >
-              <span className="w-12 h-12 flex items-center justify-center rounded-xl bg-gradient-to-b from-white/15 to-white/5 border border-white/10 text-xl text-white group-hover:scale-110 group-hover:-translate-y-1 transition-transform duration-150 shadow-lg">
+              <span className="w-12 h-12 flex items-center justify-center rounded-xl bg-gradient-to-b from-white/15 to-white/5 border border-white/10 text-white group-hover:scale-110 group-hover:-translate-y-1 transition-transform duration-150 shadow-lg">
                 {item.icon}
               </span>
               <span

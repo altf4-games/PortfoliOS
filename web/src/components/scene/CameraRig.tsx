@@ -13,11 +13,14 @@ import { useAppStore } from "@/store/useAppStore";
 // The original Unity scene positioned the camera by hand relative to a prefab whose
 // root transform isn't cleanly recoverable from the scene file, so instead of guessing
 // world-space numbers we auto-fit a sensible vantage point from the model's own geometry
-// at runtime. TUNE THESE if the default framing lands awkwardly for this specific room:
+// at runtime, then this yaw/pitch was found by manually looking around from that point
+// until the gaming desk (monitors, PC, hex wall decor) was framed well. TUNE THESE if the
+// framing lands awkwardly after any future changes to the room model:
 const EYE_HEIGHT_ABOVE_FLOOR = 1.6;
-const EXPLORE_YAW = 0;
-const OS_YAW = THREE.MathUtils.degToRad(35);
-const OS_PITCH = THREE.MathUtils.degToRad(-4);
+const EXPLORE_YAW = THREE.MathUtils.degToRad(119);
+const EXPLORE_PITCH = THREE.MathUtils.degToRad(12);
+const OS_YAW = THREE.MathUtils.degToRad(134);
+const OS_PITCH = THREE.MathUtils.degToRad(8);
 const PITCH_LIMIT = THREE.MathUtils.degToRad(80);
 
 const OS_FOV = 27;
@@ -36,12 +39,12 @@ export default function CameraRig() {
   }, [scene]);
 
   const yaw = useRef(EXPLORE_YAW);
-  const pitch = useRef(0);
+  const pitch = useRef(EXPLORE_PITCH);
   const dragging = useRef(false);
   const lastPointer = useRef({ x: 0, y: 0 });
 
   const tweenStart = useRef(0);
-  const tweenFrom = useRef({ yaw: EXPLORE_YAW, pitch: 0, fov: EXPLORE_FOV });
+  const tweenFrom = useRef({ yaw: EXPLORE_YAW, pitch: EXPLORE_PITCH, fov: EXPLORE_FOV });
   const tweenTo = useRef({ yaw: OS_YAW, pitch: OS_PITCH, fov: OS_FOV });
   const tweening = useRef(false);
 
@@ -54,7 +57,7 @@ export default function CameraRig() {
     tweenTo.current =
       mode === "os"
         ? { yaw: OS_YAW, pitch: OS_PITCH, fov: OS_FOV }
-        : { yaw: EXPLORE_YAW, pitch: 0, fov: EXPLORE_FOV };
+        : { yaw: EXPLORE_YAW, pitch: EXPLORE_PITCH, fov: EXPLORE_FOV };
     tweenStart.current = performance.now();
     tweening.current = true;
   }, [mode, camera]);

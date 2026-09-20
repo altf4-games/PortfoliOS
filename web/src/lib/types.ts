@@ -37,6 +37,8 @@ export interface SiteData {
     githubUsername: string;
     linkedinUrl: string;
     githubUrl: string;
+    itchUrl: string;
+    steamUrl: string;
   };
   education: EducationEntry[];
   experience: ExperienceEntry[];
