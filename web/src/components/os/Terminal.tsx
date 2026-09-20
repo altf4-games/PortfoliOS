@@ -25,6 +25,7 @@ export default function Terminal() {
   const site = useSiteData();
   const toggleMode = useAppStore((s) => s.toggleMode);
   const openWindow = useAppStore((s) => s.openWindow);
+  const closeWindow = useAppStore((s) => s.closeWindow);
 
   const [lines, setLines] = useState<Line[]>([
     { text: "===========================================", kind: "output" },
@@ -88,6 +89,7 @@ export default function Terminal() {
         print("techstack   - View complete tech stack");
         print("fortune     - Get a random developer quote");
         print("sudo        - Attempt elevated permissions");
+        print("exit        - Close the terminal");
         print("escape      - Toggle between OS and Explore mode (or press Escape)");
         print("");
         print("System Commands:");
@@ -173,6 +175,11 @@ export default function Terminal() {
       case "reboot":
         print("Initiating system reboot...");
         setTimeout(() => window.location.reload(), 900);
+        break;
+      case "exit":
+        print("Closing terminal...");
+        print("Goodbye!");
+        setTimeout(() => closeWindow("terminal"), 400);
         break;
       case "escape":
         toggleMode();

@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useAppStore } from "@/store/useAppStore";
 import ForceLandscape from "@/components/ForceLandscape";
 import Desktop from "@/components/os/Desktop";
+import AudioManager from "@/components/AudioManager";
 
 const SceneCanvas = dynamic(() => import("@/components/scene/SceneCanvas"), { ssr: false });
 
@@ -27,6 +28,7 @@ export default function Home() {
   return (
     <ForceLandscape>
       <main className="relative w-full h-dvh overflow-hidden bg-black select-none">
+        <AudioManager />
         {!disable3D && <SceneCanvas />}
 
         {mode === "explore" && !disable3D && (
@@ -41,7 +43,7 @@ export default function Home() {
         <div
           className={`absolute inset-0 transition-opacity duration-500 ${
             mode === "os" ? "opacity-100" : "opacity-0 pointer-events-none"
-          } ${!disable3D ? "backdrop-blur-md bg-black/30" : "bg-[#0a0a0c]"}`}
+          }`}
         >
           <Desktop />
         </div>
