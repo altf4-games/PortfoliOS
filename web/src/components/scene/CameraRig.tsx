@@ -12,15 +12,15 @@ import { useAppStore } from "@/store/useAppStore";
 // The original Unity scene positioned the camera by hand relative to a prefab whose
 // root transform isn't cleanly recoverable from the scene file (and the exported glb's
 // own optimization pass merged the chair/desk/monitor into a couple of whole-room meshes,
-// so they can't be found by name either). This position/yaw/pitch was instead found by
-// sitting in the live scene: walking the camera forward from a wide establishing shot
-// until it lands at the gaming chair, facing the desk and monitor. TUNE THESE if the
-// framing lands awkwardly after any future changes to the room model:
+// so they can't be found by name either). CAMERA_POSITION was found by sitting in the
+// live scene and walking the camera to the gaming chair; rotation is left at 0,0,0 (no
+// yaw/pitch offset) so it looks straight ahead at the desk/monitor from that point.
+// TUNE THESE if the framing lands awkwardly after any future changes to the room model:
 const CAMERA_POSITION = new THREE.Vector3(-5.75, 10.95, -9.15);
-const EXPLORE_YAW = THREE.MathUtils.degToRad(119);
-const EXPLORE_PITCH = THREE.MathUtils.degToRad(8);
-const OS_YAW = THREE.MathUtils.degToRad(134);
-const OS_PITCH = THREE.MathUtils.degToRad(5);
+const EXPLORE_YAW = 0;
+const EXPLORE_PITCH = 0;
+const OS_YAW = 0;
+const OS_PITCH = 0;
 const PITCH_LIMIT = THREE.MathUtils.degToRad(80);
 
 const OS_FOV = 27;
