@@ -2,11 +2,12 @@
 
 import { ReactNode } from "react";
 import { useAppStore, WindowId } from "@/store/useAppStore";
-import { TerminalIcon, ProjectsIcon, TrophyIcon, GitHubIcon, GearIcon } from "./icons";
+import { TerminalIcon, ProjectsIcon, TrophyIcon, GitHubIcon, BriefcaseIcon, GearIcon } from "./icons";
 
 const DOCK_ITEMS: { id: WindowId; label: string; icon: ReactNode }[] = [
   { id: "terminal", label: "Terminal", icon: <TerminalIcon className="w-6 h-6" /> },
   { id: "projects", label: "Projects", icon: <ProjectsIcon className="w-6 h-6" /> },
+  { id: "experience", label: "Experience", icon: <BriefcaseIcon className="w-6 h-6" /> },
   { id: "hackathons", label: "Hackathons", icon: <TrophyIcon className="w-6 h-6" /> },
   { id: "oss", label: "Open Source", icon: <GitHubIcon className="w-6 h-6" /> },
   { id: "settings", label: "Settings", icon: <GearIcon className="w-6 h-6" /> },

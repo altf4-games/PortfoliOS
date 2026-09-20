@@ -126,6 +126,7 @@ export default function Terminal() {
           print(e.period);
           if (i < (site?.experience.length ?? 0) - 1) print("");
         });
+        if (!isMobile) openWindow("experience");
         break;
       case "skills":
         print("Core Technical Skills:");

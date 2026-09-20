@@ -11,6 +11,7 @@ import Terminal from "./Terminal";
 import ProjectsWindow from "./ProjectsWindow";
 import HackathonsWindow from "./HackathonsWindow";
 import OssWindow from "./OssWindow";
+import ExperienceWindow from "./ExperienceWindow";
 import SettingsWindow from "./SettingsWindow";
 import { TerminalIcon } from "./icons";
 
@@ -65,6 +66,11 @@ export default function Desktop() {
         {windowOrder.includes("oss") && (
           <WindowFrame id="oss" title="Open Source">
             <OssWindow />
+          </WindowFrame>
+        )}
+        {windowOrder.includes("experience") && (
+          <WindowFrame id="experience" title="Experience">
+            <ExperienceWindow />
           </WindowFrame>
         )}
         {windowOrder.includes("settings") && (
