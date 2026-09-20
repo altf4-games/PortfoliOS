@@ -2,6 +2,7 @@
 
 import { ReactNode, useRef } from "react";
 import { useAppStore, WindowId, MIN_WINDOW_WIDTH, MIN_WINDOW_HEIGHT } from "@/store/useAppStore";
+import { getEffectiveViewport } from "@/lib/useIsMobile";
 
 export default function WindowFrame({
   id,
@@ -40,8 +41,9 @@ export default function WindowFrame({
       if (!dragState.current) return;
       const dx = ev.clientX - dragState.current.startX;
       const dy = ev.clientY - dragState.current.startY;
-      const maxX = window.innerWidth - 80;
-      const maxY = window.innerHeight - 40;
+      const viewport = getEffectiveViewport();
+      const maxX = viewport.width - 80;
+      const maxY = viewport.height - 40;
       moveWindow(
         id,
         Math.min(maxX, Math.max(-win!.width + 120, dragState.current.originX + dx)),
@@ -117,7 +119,7 @@ export default function WindowFrame({
             −
           </button>
           <button
-            onClick={() => toggleMaximizeWindow(id, { width: window.innerWidth, height: window.innerHeight })}
+            onClick={() => toggleMaximizeWindow(id, getEffectiveViewport())}
             aria-label="Maximize"
             className="w-3 h-3 rounded-full bg-[#28c840] flex items-center justify-center text-transparent group-hover:text-black/50 text-[8px] leading-none"
           >

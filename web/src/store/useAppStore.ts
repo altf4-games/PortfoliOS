@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { DEFAULT_WALLPAPER_ID } from "@/lib/wallpapers";
+import { getEffectiveViewport } from "@/lib/useIsMobile";
 
 export type Mode = "os" | "explore";
 export type WindowId = "terminal" | "projects" | "hackathons" | "settings";
@@ -51,10 +52,29 @@ interface AppState {
   toggleMaximizeWindow: (id: WindowId, viewport: { width: number; height: number }) => void;
   moveWindow: (id: WindowId, x: number, y: number) => void;
   resizeWindow: (id: WindowId, width: number, height: number) => void;
+  syncWindowsToViewport: (viewport: { width: number; height: number }) => void;
 }
 
 export const MIN_WINDOW_WIDTH = 320;
 export const MIN_WINDOW_HEIGHT = 240;
+
+// Matches the breakpoint in lib/useIsMobile.ts. A floating draggable/resizable window
+// manager doesn't translate to a phone screen, so windows there open maximized instead
+// of at the desktop-sized defaults below (which easily overflow a ~375px-wide viewport).
+function isMobileViewport(): boolean {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(max-width: 900px), (pointer: coarse)").matches;
+}
+
+function maximizedRectFor(viewport: { width: number; height: number }): Rect {
+  const topInset = 32;
+  // Desktop hides the dock entirely while a window is maximized, so it can use the full
+  // remaining height; mobile keeps the dock visible (it's the only way to switch apps or
+  // get back to Explore mode there, since windows are always maximized), so it needs
+  // room reserved at the bottom instead of the window extending underneath it.
+  const bottomInset = isMobileViewport() ? 84 : 0;
+  return { x: 0, y: topInset, width: viewport.width, height: viewport.height - topInset - bottomInset };
+}
 
 let stagger = 0;
 
@@ -88,6 +108,14 @@ export const useAppStore = create<AppState>()(
             return {
               windowOrder: [...s.windowOrder.filter((w) => w !== id), id],
               windows: { ...s.windows, [id]: { ...existing, minimized: false } },
+              focusedWindow: id,
+            };
+          }
+          if (isMobileViewport()) {
+            const rect = maximizedRectFor(getEffectiveViewport());
+            return {
+              windowOrder: [...s.windowOrder, id],
+              windows: { ...s.windows, [id]: { ...rect, minimized: false, maximized: true } },
               focusedWindow: id,
             };
           }
@@ -136,17 +164,15 @@ export const useAppStore = create<AppState>()(
           if (win.maximized && win.prevRect) {
             return { windows: { ...s.windows, [id]: { ...win, ...win.prevRect, maximized: false } } };
           }
-          const topInset = 32; // clears the menu bar
-          const maximizedRect: Rect = {
-            x: 0,
-            y: topInset,
-            width: viewport.width,
-            height: viewport.height - topInset,
-          };
           return {
             windows: {
               ...s.windows,
-              [id]: { ...win, ...maximizedRect, maximized: true, prevRect: { x: win.x, y: win.y, width: win.width, height: win.height } },
+              [id]: {
+                ...win,
+                ...maximizedRectFor(viewport),
+                maximized: true,
+                prevRect: { x: win.x, y: win.y, width: win.width, height: win.height },
+              },
             },
           };
         }),
@@ -172,6 +198,33 @@ export const useAppStore = create<AppState>()(
               },
             },
           };
+        }),
+
+      // Called on mount and on viewport/orientation changes. The store's initial state
+      // (the terminal window that's open by default) is set once at module load, before
+      // any component can check the real viewport, so it always starts at the desktop
+      // size — this reconciles it (and anything else open) against whatever screen it's
+      // actually running on: maximized on mobile, clamped to fit otherwise.
+      syncWindowsToViewport: (viewport) =>
+        set((s) => {
+          const mobile = isMobileViewport();
+          const windows = { ...s.windows };
+          for (const id of s.windowOrder) {
+            const win = windows[id];
+            if (!win) continue;
+            if (mobile) {
+              if (!win.maximized) {
+                windows[id] = { ...win, ...maximizedRectFor(viewport), maximized: true, prevRect: win };
+              }
+            } else if (!win.maximized) {
+              const width = Math.min(win.width, viewport.width - 16);
+              const height = Math.min(win.height, viewport.height - 44);
+              const x = Math.min(win.x, Math.max(0, viewport.width - 120));
+              const y = Math.min(Math.max(win.y, 28), Math.max(28, viewport.height - 80));
+              windows[id] = { ...win, width, height, x, y };
+            }
+          }
+          return { windows };
         }),
     }),
     {

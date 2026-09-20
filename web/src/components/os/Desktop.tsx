@@ -1,7 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
 import { useAppStore } from "@/store/useAppStore";
-import { useIsMobile } from "@/lib/useIsMobile";
+import { useIsMobile, getEffectiveViewport } from "@/lib/useIsMobile";
 import WallpaperLayer from "./WallpaperLayer";
 import MenuBar from "./MenuBar";
 import Dock from "./Dock";
@@ -17,9 +18,30 @@ export default function Desktop() {
   const windowOrder = useAppStore((s) => s.windowOrder);
   const windows = useAppStore((s) => s.windows);
   const toggleMode = useAppStore((s) => s.toggleMode);
+  const syncWindowsToViewport = useAppStore((s) => s.syncWindowsToViewport);
   const isMobile = useIsMobile();
 
+  // The store's default window (terminal, open on load) is sized for desktop before any
+  // component can check the real viewport. Reconcile it — and anything opened since —
+  // against whatever screen this actually is, on mount and whenever it changes.
+  useEffect(() => {
+    function sync() {
+      syncWindowsToViewport(getEffectiveViewport());
+    }
+    sync();
+    window.addEventListener("resize", sync);
+    window.addEventListener("orientationchange", sync);
+    return () => {
+      window.removeEventListener("resize", sync);
+      window.removeEventListener("orientationchange", sync);
+    };
+  }, [syncWindowsToViewport]);
+
   const anyMaximized = windowOrder.some((id) => windows[id]?.maximized);
+  // On mobile every window opens maximized by default (a floating window manager doesn't
+  // fit a phone screen), so "maximized" there isn't the deliberate, occasional desktop
+  // action that should hide navigation — hide the dock for that case only.
+  const hideChrome = !isMobile && anyMaximized;
 
   return (
     <div className="absolute inset-0 overflow-hidden">
@@ -55,9 +77,9 @@ export default function Desktop() {
         )}
       </div>
 
-      {!anyMaximized && <Dock />}
+      {!hideChrome && <Dock />}
 
-      {!anyMaximized &&
+      {!hideChrome &&
         (isMobile ? (
           <button
             onClick={toggleMode}
