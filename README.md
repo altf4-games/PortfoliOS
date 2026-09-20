@@ -1,180 +1,109 @@
 # PortfoliOS
 
-My interactive 3D portfolio experience built with Unity, designed as a functional operating system interface. Explore my work through a virtual desktop environment featuring a Unix-style terminal, project showcases, and immersive 3D navigation.
+My interactive 3D portfolio, built as a functional operating-system interface: a real desktop
+environment with a Unix-style terminal, draggable/resizable windows, and a dock, sitting in front
+of a 3D room you can step into and look around.
 
-## Screenshots
+Originally built in Unity/WebGL; rewritten as a Next.js + Three.js web app for a fraction of the
+load size and no game-engine runtime overhead — meaningfully faster to load and run, especially
+on phones and lower-end desktops.
 
-![OS Mode - Terminal Interface](Public/Screenshot%202026-02-08%20201925.png)
-*Interactive desktop environment with applications and settings*
-
-![Explore Mode - 3D Environment](Public/Screenshot%202026-02-08%20202058.png)
-*Terminal interface with portfolio commands and system information*
-
-![Project Showcase](Public/Screenshot%202026-02-08%20202117.png)
-*Free-look 3D navigation of the virtual environment*
-
-![Desktop Interface](Public/Screenshot%202026-02-08%20202241.png)
-*GitHub repository showcase with real-time data*
-
+**Live:** [pradyum.vercel.app](https://pradyum.vercel.app)
 
 ## Features
 
-### Interactive Terminal System
+### macOS-style desktop
 
-- Unix-style command-line interface with 20+ commands
-- Real portfolio data integration (education, experience, skills, achievements)
-- Command history navigation with up/down arrow keys
-- Direct links to GitHub, LinkedIn, and live resume
-- System commands: `uname`, `date`, `uptime`, `hostname`, `pwd`, `ls`, `cat`, `echo`
-- Portfolio commands: `about`, `education`, `experience`, `skills`, `achievements`, `techstack`
+- Draggable, resizable windows with real traffic-light controls (close/minimize/maximize)
+- A dock and menu bar with a live clock
+- Selectable wallpapers (including a custom upload), reflected both on the desktop and on the
+  monitor screen inside the 3D room
+- On mobile, windows open maximized (a floating window manager doesn't fit a phone screen) and
+  the whole page force-rotates into landscape via CSS, since iOS Safari doesn't support the
+  Screen Orientation Lock API
 
-### Dual Mode Experience
+### Terminal
 
-- **OS Mode**: Focused desktop interface for browsing projects and using the terminal
-- **Explore Mode**: Free-look 3D navigation of the virtual environment
-- Seamless transitions with smooth camera tweening and FOV adjustments
-- Cursor lock/hide management for optimal UX in each mode
+A from-scratch Unix-style shell: `help`, `about`, `education`, `experience`, `skills`,
+`achievements`, `techstack`, `hackathons`, `projects`, `resume`, `github`, `linkedin`, `whoami`,
+`fortune`, `sudo`, `reboot`, `exit`, `escape` (or press <kbd>Esc</kbd>), plus the usual
+`uname`/`date`/`uptime`/`hostname`/`pwd`/`ls`/`cat`/`echo`. Command history persists across
+sessions.
 
-### Dynamic Content Loading
+### Explore mode
 
-- GitHub repository showcase with real-time data from GitHub API
-- Local JSON caching for WebGL compatibility (CORS workaround)
-- Hackathon timeline with event details and project links
-- Cache-busting mechanisms for fresh data retrieval
+Press <kbd>Esc</kbd> to leave the desktop and freely look around the 3D room (drag to rotate).
+The room model is Draco/WebP-compressed to a fraction of its original size for fast loading.
 
-### Customization & Settings
+### Live project & hackathon data
 
-- Volume control with dB conversion for AudioMixer
-- "Disable 3D" mode for accessibility (OS-only experience)
-- Persistent settings using PlayerPrefs
-- Mobile support with click-to-focus interaction
+- GitHub pinned repos fetched live via the GraphQL API (falls back to a static snapshot if no
+  token is configured)
+- Custom projects (not on GitHub, private, or hosted elsewhere) can be added manually
+- Hackathon wins, work experience, education, skills, and tech stack are all editable
 
-### Technical Highlights
+### Admin panel (`/admin`)
 
-- Aspect ratio-aware camera positioning for screen quad rendering
-- Custom cursor management system independent of script lifecycle
-- Responsive UI with TextMeshPro and Unity UI components
-- Manual JSON parsing for complex nested data structures
+Everything above that used to be hardcoded — resume link, bio, hackathons, work experience,
+education, tech stack, skills, achievements, and which GitHub projects to show — is editable
+through a password-free admin panel gated by GitHub OAuth, restricted to a single allowed
+account. No more editing a backend endpoint to change the resume link.
 
-## Tech Stack
+## Tech stack
 
-- **Engine**: Unity 2025.1
-- **UI**: TextMeshPro, Unity UI (Canvas, ScrollRect, Layout Groups)
-- **Networking**: UnityWebRequest for API calls
-- **Data**: JSON parsing, PlayerPrefs persistence
-- **Audio**: AudioMixer with logarithmic volume conversion
-- **Deployment**: WebGL with CORS handling
+- **Framework:** Next.js 16 (App Router)
+- **3D:** Three.js via react-three-fiber
+- **Styling:** Tailwind CSS
+- **State:** Zustand
+- **Auth:** Auth.js (GitHub OAuth, single-account allowlist)
+- **Content storage:** Upstash Redis (via the Vercel Marketplace), with a JSON file fallback
+- **Deployment:** Vercel, auto-deploying on push to `main`
 
-## Project Structure
+## Project structure
 
 ```
-Assets/
-├── Scripts/
-│   ├── CameraFocusToggle.cs      # Dual-mode camera system
-│   ├── CameraLookAround.cs       # Free-look navigation
-│   ├── ClickToFocus.cs           # Mobile click interaction
-│   ├── CursorManager.cs          # Centralized cursor control
-│   ├── DragHandler.cs            # UI dragging functionality
-│   ├── FitScreenToCamera.cs      # Aspect ratio handling
-│   ├── HackathonTimeline.cs      # Timeline data fetching
-│   ├── Projects.cs               # GitHub repo display
-│   ├── Redirects.cs              # URL opening utilities
-│   ├── SettingsManager.cs        # Settings persistence
-│   ├── TerminalSystem.cs         # Command-line interface
-│   └── TimelineItem.cs           # Timeline UI component
-├── Data/
-│   └── github_projects.json      # Cached GitHub data
-├── Scenes/
-│   └── SampleScene.unity         # Main scene
-├── Materials/                    # Visual materials
-└── UI/                          # UI assets
+web/
+├── src/
+│   ├── app/                # Routes: /, /admin, /admin/login, API routes
+│   ├── components/
+│   │   ├── os/              # Desktop, windows, terminal, dock, menu bar
+│   │   ├── scene/            # Three.js room, camera rig, lighting
+│   │   └── admin/            # Admin dashboard UI
+│   ├── lib/                 # Content loading, GitHub API, KV, wallpapers
+│   ├── store/                # Zustand app state (windows, mode, settings)
+│   └── auth.ts               # Auth.js config
+├── content/
+│   └── site-data.json        # Default content (fallback when KV isn't configured)
+└── public/
+    ├── models/                # Compressed 3D room (glb)
+    └── wallpapers/            # Wallpaper presets
 ```
 
-## Setup & Installation
+## Local development
 
-### Prerequisites
+```bash
+cd web
+npm install
+npm run dev
+```
 
-- Unity 2025.1 or later
-- TextMeshPro package (installed via Package Manager)
+Copy `web/.env.example` to `web/.env.local` and fill in:
 
-### Local Development
+- `AUTH_GITHUB_ID` / `AUTH_GITHUB_SECRET` — a GitHub OAuth App (for `/admin` login)
+- `ALLOWED_GITHUB_LOGIN` — the only GitHub username allowed to sign in
+- `AUTH_SECRET` — generate with `npx auth secret`
+- `KV_REST_API_URL` / `KV_REST_API_TOKEN` — an Upstash Redis store (via Vercel's Storage →
+  Marketplace), for saving admin edits
+- `GITHUB_TOKEN` — optional, a token with no scopes checked, for live pinned-repo data
 
-1. Clone the repository:
+Without `KV_REST_API_URL`/`KV_REST_API_TOKEN`, the site still runs fine off
+`web/content/site-data.json`, but `/admin` saves will fail. Without `GITHUB_TOKEN`, the Projects
+window falls back to `web/content/github-fallback.json`.
 
-   ```bash
-   git clone https://github.com/altf4-games/PortfoliOS.git
-   ```
+## Deployment
 
-2. Open the project in Unity Hub
-
-3. Open `Assets/Scenes/SampleScene.unity`
-
-4. Press Play to run in the Unity Editor
-
-### WebGL Build
-
-1. Go to File > Build Settings
-2. Select WebGL platform
-3. Click "Switch Platform"
-4. Click "Build" and choose output directory
-5. Host the build files on a web server
-
-## Usage
-
-### Terminal Commands
-
-**Portfolio Information:**
-
-- `about` - Introduction and overview
-- `education` - Educational background
-- `experience` - Work experience
-- `skills` - Core technical competencies
-- `techstack` - Complete technology stack
-- `achievements` - Awards and recognitions
-- `whoami` - User identity
-
-**Navigation:**
-
-- `linkedin` - Open LinkedIn profile
-- `github` - Open GitHub profile
-- `resume` - Fetch and open latest resume
-- `escape` - Toggle between OS and Explore modes
-
-**System Commands:**
-
-- `help` - List all available commands
-- `clear` - Clear terminal output
-- `fortune` - Random developer quote
-- `uname` - OS information
-- `date` - Current date and time
-- `uptime` - System uptime
-- `hostname` - System hostname
-- `pwd` - Working directory
-- `ls` - List directory contents
-- `cat [file]` - Display file contents
-- `echo [text]` - Display text
-
-### Controls
-
-**OS Mode:**
-
-- Type commands in terminal
-- Click UI elements
-- Press Escape to enter Explore Mode
-
-**Explore Mode:**
-
-- Mouse drag to look around
-- Press Escape to return to OS Mode
-- Click the computer (mobile) to return to OS Mode
-
-## API Endpoints
-
-- GitHub Projects: `https://api.github.com/users/altf4-games/repos`
-- Resume URL: `https://code-snip.vercel.app/raw/100`
-- Hackathon Timeline: `https://code-snip.vercel.app/raw/101`
-
-All endpoints use cache-busting with timestamp query parameters.
+Deployed on Vercel with the project's **Root Directory** set to `web` (this is a monorepo — the
+Next.js app doesn't live at the repo root). Auto-deploys on every push to `main`.
 
 ## Contact
 
