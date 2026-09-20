@@ -1,0 +1,89 @@
+{
+  "profile": {
+    "name": "Pradyum Mistry",
+    "whoami": "Pradyum Mistry - Full Stack Developer, Game Developer, App Developer, Competitive Programmer, and AI/ML Enthusiast.",
+    "about": "Hi, I am Pradyum Mistry, a developer passionate about games, XR, and full-stack engineering.",
+    "hostname": "portfolios.local",
+    "resumeUrl": "https://code-snip.vercel.app/raw/100",
+    "githubUsername": "altf4-games",
+    "linkedinUrl": "https://linkedin.com/in/pradyum-mistry",
+    "githubUrl": "https://github.com/altf4-games"
+  },
+  "education": [
+    {
+      "degree": "B.Tech in Computer Engineering",
+      "institution": "K.J. Somaiya College of Engineering, Mumbai",
+      "period": "Expected Graduation: 2027",
+      "detail": "CGPA: 9.5"
+    }
+  ],
+  "experience": [
+    {
+      "role": "Game Development & XR Intern",
+      "org": "VyuXR Immersive Studios",
+      "period": "May 2025 - June 2025"
+    },
+    {
+      "role": "Tech Head",
+      "org": "Team Vision AR/VR Club",
+      "period": "July 2024 - May 2025"
+    }
+  ],
+  "skills": [
+    "Full-Stack Development (Web & Mobile)",
+    "AI/ML",
+    "Competitive Programming (4 Star CodeChef, 300+ LeetCode)",
+    "Backend Architecture & APIs",
+    "Real-time Communication (WebRTC, Socket.io)",
+    "Database Design & Optimization",
+    "Game Development (Unity, Unreal Engine)",
+    "XR Development (WebXR, AR/VR)"
+  ],
+  "techStack": {
+    "Languages": "C, C++, C#, JavaScript, Python, Java, Dart",
+    "Frontend": "HTML, CSS, React, Next.js, Three.js",
+    "Backend": "Node.js, Express, FastAPI",
+    "Databases": "MongoDB, PostgreSQL, Firebase",
+    "Game Engines": "Unity, Unreal Engine",
+    "Mobile": "Flutter, React Native",
+    "AI/ML": "Scikit-learn, TensorFlow",
+    "Other": "Socket.io, WebRTC, WebXR"
+  },
+  "achievements": [
+    "Won Most Addictive Game at 8th Wall Forge the Future Game Jam",
+    "Top 10 in I Love Hackathon Pune Web3 Edition",
+    "Top 6 in KJSSE Hack 8",
+    "4 Star CodeChef Rating",
+    "300+ LeetCode problems solved",
+    "Games featured by Markiplier and Jacksepticeye (20M+ subscribers)",
+    "200K+ game downloads across platforms"
+  ],
+  "hackathons": [
+    {
+      "id": "8thwall-forge",
+      "title": "8th Wall Forge the Future Game Jam",
+      "result": "Won Most Addictive Game",
+      "date": "2025",
+      "url": ""
+    },
+    {
+      "id": "ilh-pune-web3",
+      "title": "I Love Hackathon Pune - Web3 Edition",
+      "result": "Top 10",
+      "date": "2025",
+      "url": ""
+    },
+    {
+      "id": "kjsse-hack8",
+      "title": "KJSSE Hack 8",
+      "result": "Top 6",
+      "date": "2025",
+      "url": ""
+    }
+  ],
+  "projectOverrides": {
+    "excluded": [],
+    "featured": [],
+    "custom": []
+  }
+}
