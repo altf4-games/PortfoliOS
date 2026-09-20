@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import RoomModel from "./RoomModel";
 import CameraRig from "./CameraRig";
+import MonitorScreenSync from "./MonitorScreenSync";
 
 export default function SceneCanvas() {
   return (
@@ -35,6 +36,7 @@ export default function SceneCanvas() {
 
       <Suspense fallback={null}>
         <RoomModel />
+        <MonitorScreenSync />
       </Suspense>
       <CameraRig />
     </Canvas>

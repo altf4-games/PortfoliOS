@@ -15,3 +15,7 @@ export const WALLPAPERS: Wallpaper[] = [
 ];
 
 export const DEFAULT_WALLPAPER_ID = "minimal-gradient";
+
+export function resolveWallpaperUrl(wallpaperId: string, customWallpaper: string | null): string {
+  return customWallpaper ?? WALLPAPERS.find((w) => w.id === wallpaperId)?.url ?? WALLPAPERS[0].url;
+}

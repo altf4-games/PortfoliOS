@@ -61,7 +61,7 @@ export const useAppStore = create<AppState>()(
       setMode: (mode) => set({ mode }),
       toggleMode: () => set((s) => ({ mode: s.mode === "os" ? "explore" : "os" })),
 
-      volume: 0.5,
+      volume: 0.12,
       setVolume: (volume) => set({ volume }),
       disable3D: false,
       setDisable3D: (disable3D) => set({ disable3D }),
