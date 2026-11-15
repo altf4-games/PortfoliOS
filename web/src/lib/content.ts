@@ -17,7 +17,9 @@ function mergeWithDefaults(override: Partial<SiteData> | null): SiteData {
     skills: override.skills ?? DEFAULTS.skills,
     techStack: override.techStack ?? DEFAULTS.techStack,
     achievements: override.achievements ?? DEFAULTS.achievements,
-    hackathons: override.hackathons ?? DEFAULTS.hackathons,
+    // Entries saved before the win/placement toggle existed have no isWinner; they were
+    // all wins, and the admin panel already reads a missing flag that way.
+    hackathons: (override.hackathons ?? DEFAULTS.hackathons).map((h) => ({ ...h, isWinner: h.isWinner ?? true })),
     oss: override.oss ?? DEFAULTS.oss,
     ossHidden: override.ossHidden ?? DEFAULTS.ossHidden,
     ossExcludedRepos: override.ossExcludedRepos ?? DEFAULTS.ossExcludedRepos,

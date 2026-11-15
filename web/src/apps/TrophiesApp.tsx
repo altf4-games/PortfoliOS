@@ -14,8 +14,8 @@ export default function TrophiesApp() {
     );
   }
 
-  const wins = site.hackathons.filter((h) => h.isWinner ?? true);
-  const placements = site.hackathons.filter((h) => !(h.isWinner ?? true));
+  const wins = site.hackathons.filter((h) => h.isWinner);
+  const placements = site.hackathons.filter((h) => !h.isWinner);
 
   return (
     <AppBody className="space-y-6">
