@@ -167,7 +167,7 @@ export default function TerminalApp() {
           `${"pradyum"}@${site?.profile.hostname ?? "portfolios"}`,
           "-----------------------",
           `OS: PortfoliOS 3.0 (${theme === "golden" ? "Golden Gate" : theme === "retro" ? "Retro 98" : "Hyprland"})`,
-          "Host: K.J. Somaiya College of Engineering",
+          "Host: K. J. Somaiya School of Engineering",
           `Uptime: ${Math.floor(performance.now() / 60000)} mins`,
           "Shell: portfolio-sh 3.0",
           "Langs: C++, C#, Go, Python, TypeScript",

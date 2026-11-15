@@ -20,29 +20,18 @@ const WELCOME: Record<ThemeId, string> = {
   hypr: "Alt+Enter terminal · Alt+D launcher · Alt+1-5 workspaces.",
 };
 
-// First boot opens About Me and the Terminal side by side, with the terminal focused so a
-// visitor can start typing straight away. Hyprland tiles them itself.
+// First boot opens just About Me, centred, as the visitor's starting point.
 function openStartupWindows() {
   const s = useAppStore.getState();
   s.openWindow("about");
-  s.openWindow("terminal");
   if (s.theme === "hypr") return;
-  const { windows } = useAppStore.getState();
-  const about = windows.about;
-  const term = windows.terminal;
-  if (!about || !term) return;
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
-  const gap = 24;
+  const about = useAppStore.getState().windows.about;
+  if (!about) return;
   const top = s.theme === "retro" ? 24 : 56;
   const bottom = s.theme === "retro" ? 48 : 110;
-  const total = about.width + gap + term.width;
-  const aboutX = total + 32 <= vw ? Math.round((vw - total) / 2) : 16;
-  const termX = total + 32 <= vw ? aboutX + about.width + gap : Math.max(16, vw - term.width - 16);
-  const aboutY = Math.max(top, Math.round((vh - about.height) / 2 - 30));
-  const termY = Math.min(Math.max(top, aboutY + 40), Math.max(top, vh - bottom - term.height));
-  s.moveWindow("about", aboutX, aboutY);
-  s.moveWindow("terminal", termX, termY);
+  const x = Math.max(16, Math.round((window.innerWidth - about.width) / 2));
+  const y = Math.max(top, Math.round((window.innerHeight - bottom + top - about.height) / 2));
+  s.moveWindow("about", x, y);
 }
 
 export default function Desktop() {

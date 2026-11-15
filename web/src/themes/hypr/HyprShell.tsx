@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { TRACKS } from "@/lib/music";
 import { useAppStore, type WindowId } from "@/store/useAppStore";
 import { APP_COMPONENTS } from "@/apps/registry";
 import { APP_META, appName } from "@/apps/meta";
@@ -65,6 +66,7 @@ function Waybar({ fullscreen }: { fullscreen: boolean }) {
   const volume = useAppStore((s) => s.volume);
   const setVolume = useAppStore((s) => s.setVolume);
   const playing = useAppStore((s) => s.musicPlaying);
+  const trackIndex = useAppStore((s) => s.trackIndex);
   const eggs = useAppStore((s) => s.eggs.length);
   const now = useClock(1000);
   const [cpu, setCpu] = useState(7);
@@ -107,7 +109,7 @@ function Waybar({ fullscreen }: { fullscreen: boolean }) {
       </div>
 
       <div className="flex items-center h-full rounded-lg bg-[#1e1e2e] border border-[#313244] divide-x divide-[#313244]">
-        {playing && <span className="px-3 text-[#f5c2e7]">♪ lo-fi</span>}
+        {playing && <span className="px-3 text-[#f5c2e7]">♪ {TRACKS[trackIndex % TRACKS.length].title.toLowerCase()}</span>}
         <span className="px-3 text-[#94e2d5]">cpu {cpu}%</span>
         <span className="px-3 text-[#f9e2af]">eggs {eggs}/{EGGS.length}</span>
         <button className="px-3 text-[#fab387]" onClick={() => setVolume(volume > 0 ? 0 : 0.3)} title="Toggle volume">

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useAppStore } from "@/store/useAppStore";
 import { audioBus } from "@/components/AudioManager";
+import { ALBUM, TRACKS } from "@/lib/music";
 
 function fmt(t: number) {
   if (!isFinite(t)) return "0:00";
@@ -15,6 +16,9 @@ export default function MusicApp() {
   const volume = useAppStore((s) => s.volume);
   const setVolume = useAppStore((s) => s.setVolume);
   const theme = useAppStore((s) => s.theme);
+  const trackIndex = useAppStore((s) => s.trackIndex);
+  const setTrack = useAppStore((s) => s.setTrack);
+  const track = TRACKS[trackIndex % TRACKS.length];
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [time, setTime] = useState({ cur: 0, dur: 0 });
 
@@ -63,8 +67,19 @@ export default function MusicApp() {
 
   const retro = theme === "retro";
 
+  function choose(i: number) {
+    setTrack((i + TRACKS.length) % TRACKS.length);
+    if (!playing) {
+      if (volume === 0) setVolume(0.3);
+      setPlaying(true);
+    }
+  }
+  function skip(d: number) {
+    setTrack((trackIndex + d + TRACKS.length) % TRACKS.length);
+  }
+
   return (
-    <div className="ui-app h-full flex flex-col p-5 gap-4">
+    <div className="ui-app h-full flex flex-col p-5 gap-4 overflow-y-auto thin-scroll">
       <div
         className={`relative aspect-square w-full max-w-[240px] mx-auto overflow-hidden ${retro ? "bevel-in" : "rounded-xl"}`}
         style={{ background: retro ? "#000" : "#2c2c2e" }}
@@ -83,8 +98,10 @@ export default function MusicApp() {
       </div>
 
       <div className="text-center">
-        <div className="ui-heading text-[16px]">Late Night Lo-fi</div>
-        <div className="ui-muted text-[13px]">PortfoliOS Radio</div>
+        <div className="ui-heading text-[16px]">{track.title}</div>
+        <div className="ui-muted text-[13px]">
+          {ALBUM.artist} · {ALBUM.title}
+        </div>
       </div>
 
       <canvas ref={canvasRef} width={320} height={56} className="w-full h-14" />
@@ -99,7 +116,10 @@ export default function MusicApp() {
         </div>
       </div>
 
-      <div className="flex justify-center">
+      <div className="flex justify-center items-center gap-3">
+        <button onClick={() => skip(-1)} className="ui-btn !w-9 !h-9 !p-0 !rounded-full" aria-label="Previous track">
+          <svg viewBox="0 0 16 16" className="w-3.5 h-3.5 mx-auto" fill="currentColor"><path d="M3 3h2v10H3zM14 3v10L6 8z" /></svg>
+        </button>
         <button
           onClick={() => {
             if (!playing && volume === 0) setVolume(0.3);
@@ -110,6 +130,9 @@ export default function MusicApp() {
         >
           {playing ? "❚❚" : "▶"}
         </button>
+        <button onClick={() => skip(1)} className="ui-btn !w-9 !h-9 !p-0 !rounded-full" aria-label="Next track">
+          <svg viewBox="0 0 16 16" className="w-3.5 h-3.5 mx-auto" fill="currentColor"><path d="M11 3h2v10h-2zM2 3v10l8-5z" /></svg>
+        </button>
       </div>
 
       <label className="flex items-center gap-3 text-[12px] ui-muted">
@@ -118,6 +141,24 @@ export default function MusicApp() {
         <svg viewBox="0 0 16 16" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.3"><path d="M3 6h2l3-3v10L5 10H3z" fill="currentColor" stroke="none" /><path d="M10.5 5.5a3.5 3.5 0 0 1 0 5M12.5 3.5a6.5 6.5 0 0 1 0 9" /></svg>
       </label>
       {volume === 0 && <p className="text-[11px] ui-faint text-center -mt-2">Muted by default. Press play or raise the volume.</p>}
+
+      <ol className="ui-card divide-y divide-white/[0.06] text-[13px]">
+        {TRACKS.map((t, i) => (
+          <li key={t.src}>
+            <button onClick={() => choose(i)} className="w-full flex items-center gap-3 px-3 py-2 text-left">
+              <span className="w-4 text-[11px] ui-faint tabular-nums">{i === trackIndex && playing ? "♪" : i + 1}</span>
+              <span className={i === trackIndex ? "ui-heading" : ""}>{t.title}</span>
+            </button>
+          </li>
+        ))}
+      </ol>
+      <p className="text-[11px] ui-faint text-center">
+        Music:{" "}
+        <a href={ALBUM.url} target="_blank" rel="noreferrer" className="underline underline-offset-2">
+          {ALBUM.artist}, {ALBUM.title}
+        </a>{" "}
+        ({ALBUM.license}, Free Music Archive)
+      </p>
     </div>
   );
 }

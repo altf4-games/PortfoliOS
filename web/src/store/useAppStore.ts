@@ -47,6 +47,8 @@ interface AppState {
   setVolume: (v: number) => void;
   musicPlaying: boolean;
   setMusicPlaying: (v: boolean) => void;
+  trackIndex: number;
+  setTrack: (i: number) => void;
   disable3D: boolean;
   setDisable3D: (v: boolean) => void;
   glassOpacity: number; // 0..1, Golden Gate's Liquid Glass slider
@@ -148,6 +150,8 @@ export const useAppStore = create<AppState>()(
       setVolume: (volume) => set({ volume }),
       musicPlaying: false,
       setMusicPlaying: (musicPlaying) => set({ musicPlaying }),
+      trackIndex: 0,
+      setTrack: (trackIndex) => set({ trackIndex }),
       disable3D: false,
       setDisable3D: (disable3D) => set({ disable3D }),
       glassOpacity: 0.75,

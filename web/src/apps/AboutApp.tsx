@@ -78,7 +78,7 @@ export default function AboutApp() {
         items={[
           [edu?.detail?.match(/[\d.]+/)?.[0] ?? "—", "CGPA"],
           [prs ? prs.length : "…", orgs ? `merged PRs, ${orgs} orgs` : "merged PRs"],
-          ["200K+", "game downloads"],
+          ["100K+", "game downloads"],
           [String(site.hackathons.filter((h) => h.isWinner).length), "hackathon wins"],
         ]}
       />

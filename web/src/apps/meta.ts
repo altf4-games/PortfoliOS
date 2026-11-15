@@ -39,7 +39,7 @@ export const APP_META: AppMeta[] = [
   { id: "resume", title: "Resume", names: { golden: "Preview", retro: "Resume Viewer" }, size: { width: 640, height: 720 }, keywords: ["cv", "pdf", "download"], inDock: true },
   { id: "files", title: "Files", names: { golden: "Finder", retro: "My Computer", hypr: "thunar" }, size: { width: 680, height: 460 }, keywords: ["folders", "browse", "explorer"], inDock: true },
   { id: "terminal", title: "Terminal", names: { retro: "Command Prompt", hypr: "kitty" }, size: { width: 660, height: 440 }, keywords: ["shell", "cli", "command", "zsh"], inDock: true },
-  { id: "music", title: "Music", size: { width: 380, height: 520 }, keywords: ["lofi", "audio", "player", "sound"], inDock: true },
+  { id: "music", title: "Music", size: { width: 380, height: 640 }, keywords: ["lofi", "audio", "player", "sound"], inDock: true },
   { id: "arcade", title: "Stacker", size: { width: 420, height: 600 }, keywords: ["game", "play", "arcade", "fun"], inDock: true },
   { id: "settings", title: "Settings", names: { golden: "System Settings", retro: "Control Panel" }, size: { width: 620, height: 540 }, keywords: ["theme", "wallpaper", "volume", "preferences"], inDock: true },
 ];

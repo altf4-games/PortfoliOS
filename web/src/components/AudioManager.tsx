@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useAppStore } from "@/store/useAppStore";
+import { TRACKS } from "@/lib/music";
 
 // One shared audio graph: <audio> → analyser → gain → speakers. The analyser sits before
 // the gain so the Music app's visualizer still moves while volume is 0 (the default).
@@ -36,6 +37,9 @@ export default function AudioManager() {
   const volume = useAppStore((s) => s.volume);
   const playing = useAppStore((s) => s.musicPlaying);
   const setPlaying = useAppStore((s) => s.setMusicPlaying);
+  const trackIndex = useAppStore((s) => s.trackIndex);
+  const setTrack = useAppStore((s) => s.setTrack);
+  const track = TRACKS[trackIndex % TRACKS.length];
   const ref = useRef<HTMLAudioElement | null>(null);
   const prevVolume = useRef(volume);
 
@@ -63,5 +67,11 @@ export default function AudioManager() {
     }
   }, [playing, setPlaying]);
 
-  return <audio ref={ref} src="/audio/lofi.mp3" loop preload="none" />;
+  // A new track swaps the element's src, which stops playback; resume if we were playing.
+  useEffect(() => {
+    const el = ref.current;
+    if (el && useAppStore.getState().musicPlaying) el.play().catch(() => setPlaying(false));
+  }, [track.src, setPlaying]);
+
+  return <audio ref={ref} src={track.src} preload="none" onEnded={() => setTrack((trackIndex + 1) % TRACKS.length)} />;
 }

@@ -30,7 +30,7 @@ Hyprland keybinds use <kbd>Alt</kbd> in place of Super, since browsers swallow t
 <kbd>Alt</kbd>+<kbd>Q</kbd> close, <kbd>Alt</kbd>+<kbd>F</kbd> fullscreen,
 <kbd>Alt</kbd>+<kbd>1–5</kbd> workspaces, <kbd>Alt</kbd>+arrows to move focus.
 
-On first boot, About Me and the Terminal open side by side, with the terminal focused.
+On first boot, About Me opens centred on the desktop.
 
 ### Apps
 
@@ -42,7 +42,7 @@ Resume · Files · Terminal · Music · Arcade · Settings
 - **Games** scrapes the itch.io profile live, with covers and links.
 - **Coding Stats** pulls LeetCode, Codeforces, CodeChef and GitHub numbers live.
 - **Research** holds publications; **Projects** adds case studies alongside pinned repos.
-- **Arcade** is a small stacking game. **Music** is a player with a live visualizer.
+- **Arcade** is a small stacking game. **Music** plays a CC0 lo-fi playlist ([HoliznaCC0, *Winter Lofi*](https://freemusicarchive.org/music/holiznacc0/winter-lofi)) with a live visualizer.
 - **Settings** has desktop previews, per-desktop wallpapers (plus a custom upload), glass
   frost, Dock size and magnification, CRT, volume, a 3D toggle, and easter-egg progress.
 

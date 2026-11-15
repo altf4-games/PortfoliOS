@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { TRACKS } from "@/lib/music";
 import { useAppStore, type ThemeId } from "@/store/useAppStore";
 import { WALLPAPERS, DEFAULT_WALLPAPER } from "@/lib/wallpapers";
 
@@ -20,6 +21,7 @@ export default function ControlCenter() {
   const setGlass = useAppStore((s) => s.setGlassOpacity);
   const playing = useAppStore((s) => s.musicPlaying);
   const setPlaying = useAppStore((s) => s.setMusicPlaying);
+  const trackIndex = useAppStore((s) => s.trackIndex);
   const theme = useAppStore((s) => s.theme);
   const setTheme = useAppStore((s) => s.setTheme);
   const setMode = useAppStore((s) => s.setMode);
@@ -52,7 +54,7 @@ export default function ControlCenter() {
       >
         <Tile onClick={() => setPlaying(!playing)} active={playing}>
           <div className="text-[18px] leading-5">{playing ? "❚❚" : "▶"}</div>
-          <div className="text-[12px] font-semibold mt-1">Lo-fi Radio</div>
+          <div className="text-[12px] font-semibold mt-1 truncate">{TRACKS[trackIndex % TRACKS.length].title}</div>
           <div className="text-[11px] opacity-60">{playing ? "Playing" : "Paused"}</div>
         </Tile>
         <Tile onClick={nextWallpaper}>

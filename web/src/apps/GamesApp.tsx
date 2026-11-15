@@ -7,7 +7,8 @@ import type { ItchGame } from "@/lib/types";
 import { ItchIcon, SteamIcon } from "@/components/os/icons";
 import { AppBody, Section, Skeleton, Stats } from "./ui";
 
-const STEAM_HEADER = "https://cdn.akamai.steamstatic.com/steam/apps/4539460/header.jpg";
+// Self-hosted: Steam now serves capsule art from hashed, changing paths.
+const STEAM_HEADER = "/games/fragments-of-fear.webp";
 
 export default function GamesApp() {
   const site = useSiteData();
@@ -41,7 +42,7 @@ export default function GamesApp() {
 
       <Stats
         items={[
-          ["200K+", "downloads"],
+          ["100K+", "downloads"],
           [games ? games.length + 1 : "…", "games shipped"],
           ["2", "game jam wins"],
         ]}
