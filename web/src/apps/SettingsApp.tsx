@@ -57,6 +57,10 @@ export default function SettingsApp() {
   const setGlassOpacity = useAppStore((s) => s.setGlassOpacity);
   const crt = useAppStore((s) => s.crt);
   const setCrt = useAppStore((s) => s.setCrt);
+  const dockSize = useAppStore((s) => s.dockSize);
+  const setDockSize = useAppStore((s) => s.setDockSize);
+  const dockMagnify = useAppStore((s) => s.dockMagnify);
+  const setDockMagnify = useAppStore((s) => s.setDockMagnify);
   const wallpapers = useAppStore((s) => s.wallpapers);
   const setWallpaper = useAppStore((s) => s.setWallpaper);
   const customWallpaper = useAppStore((s) => s.customWallpaper);
@@ -105,8 +109,22 @@ export default function SettingsApp() {
             <span className="text-[13px] w-28 shrink-0">Glass opacity</span>
             <span className="text-[11px] ui-faint">Clear</span>
             <input type="range" min={0.1} max={0.95} step={0.01} value={glassOpacity} onChange={(e) => setGlassOpacity(Number(e.target.value))} className="flex-1" style={{ accentColor: "var(--ui-accent)" }} />
-            <span className="text-[11px] ui-faint">Tinted</span>
+            <span className="text-[11px] ui-faint">Frosted</span>
           </label>
+        )}
+        {theme === "golden" && (
+          <div className="ui-card divide-y divide-white/[0.06]">
+            <label className="flex items-center gap-4 px-4 py-3">
+              <span className="text-[13px] w-28 shrink-0">Dock size</span>
+              <span className="text-[11px] ui-faint">Small</span>
+              <input type="range" min={36} max={80} step={1} value={dockSize} onChange={(e) => setDockSize(Number(e.target.value))} className="flex-1" style={{ accentColor: "var(--ui-accent)" }} />
+              <span className="text-[11px] ui-faint">Large</span>
+            </label>
+            <label className="flex items-center gap-3 px-4 py-3 cursor-pointer">
+              <input type="checkbox" checked={dockMagnify} onChange={(e) => setDockMagnify(e.target.checked)} style={{ accentColor: "var(--ui-accent)" }} />
+              <span className="text-[13px]">Magnification</span>
+            </label>
+          </div>
         )}
         {theme === "retro" && (
           <label className="ui-card flex items-center gap-3 px-4 py-3 cursor-pointer">

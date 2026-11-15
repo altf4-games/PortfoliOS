@@ -37,7 +37,7 @@ export default function GoldenWindow({ id }: { id: WindowId }) {
       }
       exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.16, ease: "easeIn" } }}
       onPointerDown={() => focusWindow(id)}
-      className="absolute pointer-events-auto flex flex-col overflow-hidden glass"
+      className="absolute pointer-events-auto flex flex-col overflow-hidden glass-window"
       style={{
         left: win.x,
         top: win.y,
@@ -80,7 +80,7 @@ export default function GoldenWindow({ id }: { id: WindowId }) {
       <div
         data-theme="golden"
         className="flex-1 min-h-0 overflow-hidden"
-        style={{ background: `rgba(16,16,20,${0.18 + glass * 0.55})` }}
+        style={{ background: `rgba(28,28,31,${0.86 + glass * 0.13})` }}
       >
         <App />
       </div>

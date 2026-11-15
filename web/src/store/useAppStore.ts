@@ -53,6 +53,10 @@ interface AppState {
   setGlassOpacity: (v: number) => void;
   crt: boolean;
   setCrt: (v: boolean) => void;
+  dockSize: number; // Golden Gate Dock icon size in px, like System Settings → Desktop & Dock
+  setDockSize: (v: number) => void;
+  dockMagnify: boolean;
+  setDockMagnify: (v: boolean) => void;
   devHud: boolean;
   setDevHud: (v: boolean) => void;
 
@@ -150,6 +154,10 @@ export const useAppStore = create<AppState>()(
       setGlassOpacity: (glassOpacity) => set({ glassOpacity }),
       crt: false,
       setCrt: (crt) => set({ crt }),
+      dockSize: 52,
+      setDockSize: (dockSize) => set({ dockSize }),
+      dockMagnify: true,
+      setDockMagnify: (dockMagnify) => set({ dockMagnify }),
       devHud: false,
       setDevHud: (devHud) => set({ devHud }),
 
@@ -339,6 +347,8 @@ export const useAppStore = create<AppState>()(
         disable3D: s.disable3D,
         glassOpacity: s.glassOpacity,
         crt: s.crt,
+        dockSize: s.dockSize,
+        dockMagnify: s.dockMagnify,
         devHud: s.devHud,
         wallpapers: s.wallpapers,
         customWallpaper: s.customWallpaper,

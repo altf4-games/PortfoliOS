@@ -24,7 +24,7 @@ const COMMANDS = [
   "help", "clear", "about", "whoami", "neofetch", "education", "experience", "skills", "techstack",
   "achievements", "hackathons", "oss", "projects", "games", "stats", "resume", "github", "linkedin",
   "open", "theme", "explore", "eggs", "fortune", "cowsay", "matrix", "hire-me", "sudo", "unlock",
-  "history", "reboot", "exit", "uname", "date", "uptime", "hostname", "pwd", "ls", "cat", "echo", "cd", "vim",
+  "history", "reboot", "exit", "uname", "version", "date", "uptime", "hostname", "pwd", "ls", "cat", "echo", "cd", "vim",
 ];
 
 const FILES: Record<string, string> = {
@@ -66,6 +66,7 @@ export default function TerminalApp() {
 
   const [lines, setLines] = useState<Line[]>([
     { text: "PortfoliOS 3.0 — type 'help' to see what you can do.", kind: "accent" },
+    { text: "Try: neofetch · projects · oss · stats · theme hypr · hire-me", kind: "dim" },
     { text: "", kind: "out" },
   ]);
   const [input, setInput] = useState("");
@@ -317,6 +318,7 @@ export default function TerminalApp() {
         setTimeout(() => closeWindow("terminal"), 300);
         break;
       case "uname":
+      case "version":
         out(`PortfoliOS 3.0.0 ${theme} next.js react-three-fiber x86_64`);
         break;
       case "date":
