@@ -63,7 +63,7 @@ visits.
 ### Phone OS
 
 Phones get a dedicated phone OS in the Golden Gate style rather than a shrunken desktop: a lock
-screen you swipe up, a home screen with a profile widget and Dock, apps that zoom open from
+screen you swipe up, a two-page home screen (apps with a profile widget, then swipe left for live widgets: now playing, coding stats, open source and the latest game) above a fixed Dock, apps that zoom open from
 their icon, and a swipe-up home gesture. It shares the same apps and data as the desktop.
 
 ### 3D room
