@@ -2,121 +2,314 @@
   "profile": {
     "name": "Pradyum Mistry",
     "whoami": "Pradyum Mistry - Full Stack Developer, Game Developer, App Developer, Competitive Programmer, and AI/ML Enthusiast.",
-    "about": "Hi, I am Pradyum Mistry, a developer passionate about games, XR, and full-stack engineering.",
+    "about": "I'm a Computer Engineering student at K. J. Somaiya School of Engineering who builds across the stack: production tooling at Barclays, on-device ML for accessibility, a self-hosted deployment platform, cross-chain smart contracts, and, since 2016, my own indie game studio, whose horror games have been played on YouTube by Markiplier and Jacksepticeye. I like hard problems with a visible payoff.",
+    "tagline": "Full-stack, games, XR & on-device AI",
+    "location": "Mumbai, India",
+    "currently": "Ex-SWE Intern @ Barclays · B.Tech CE @ KJSSE '27",
     "hostname": "portfolios.local",
-    "resumeUrl": "https://code-snip.vercel.app/raw/100",
+    "resumeUrl": "https://drive.google.com/file/d/1DP7GFSlMe4EW5UFzEc9_EW51H3MuaMMI/view",
     "githubUsername": "altf4-games",
+    "avatarUrl": "https://avatars.githubusercontent.com/u/39883432?v=4",
     "linkedinUrl": "https://linkedin.com/in/pradyum-mistry",
     "githubUrl": "https://github.com/altf4-games",
     "itchUrl": "https://altf4-games.itch.io/",
-    "steamUrl": "https://store.steampowered.com/app/4539460/Fragments_of_Fear/"
+    "steamUrl": "https://store.steampowered.com/app/4539460/Fragments_of_Fear/",
+    "portfolioUrl": "https://pradyum.is-a.dev",
+    "orcidUrl": "https://orcid.org/0009-0008-1211-778X",
+    "email": "",
+    "leetcodeUsername": "pradyum_mistry",
+    "codechefUsername": "pradyum_m",
+    "codeforcesUsername": ""
   },
   "education": [
     {
-      "id": "kjsce-btech",
-      "degree": "B.Tech in Computer Engineering",
-      "institution": "K.J. Somaiya College of Engineering, Mumbai",
+      "id": "kjsse-btech",
+      "degree": "B.Tech in Computer Engineering, Honours in Software and Mobile App Development",
+      "institution": "K. J. Somaiya School of Engineering, Somaiya Vidyavihar University",
       "period": "Expected Graduation: 2027",
-      "detail": "CGPA: 9.5"
+      "detail": "CGPA: 9.63/10"
     }
   ],
   "experience": [
     {
+      "id": "barclays-swe-intern",
+      "role": "Software Engineering Intern",
+      "org": "Barclays (Investment Banking)",
+      "period": "Jun 2026 - Aug 2026",
+      "location": "Pune, India",
+      "bullets": [
+        "Cut change-request turnaround from days to minutes for a 1.17M-row PostgreSQL table by building audited React/FastAPI CRUD tooling with server-side pagination, search and SQL trigger-based audit trails.",
+        "Built a graph-based task execution engine that runs dependent data loads with prerequisite handling and REST status tracking, plus a Kafka publishing utility that validates CSV, JSON and plain-text input before publishing.",
+        "Generated React forms at runtime from JSON schemas to trigger workflows, using events parsed from legacy HTML pages.",
+        "Shipped the tools as secure self-service apps with SSO, Docker and AWS, running on live data."
+      ]
+    },
+    {
       "id": "vyuxr-intern",
       "role": "Game Development & XR Intern",
       "org": "VyuXR Immersive Studios",
-      "period": "May 2025 - June 2025"
+      "period": "May 2025 - Jun 2025",
+      "location": "Mumbai, India",
+      "bullets": [
+        "Optimised mixed-reality features in Unity and fixed XR module bugs, contributing to a 30% drop in crash rates.",
+        "Built a game for the 8th Wall Forge the Future Game Jam that won the “Most Addictive Game” award."
+      ]
+    },
+    {
+      "id": "altf4-games-founder",
+      "role": "Founder & Sole Developer",
+      "org": "ALTF4 Games (indie game studio)",
+      "period": "Nov 2016 - Present",
+      "bullets": [
+        "Started the studio in 2016 and have run it on my own since: 22 titles on itch.io, plus releases on Steam and Google Play, with 100,000+ downloads in total.",
+        "Signed a publishing deal with Upscale Studio to port Captive, a 3D horror game, to Nintendo.",
+        "Own the full pipeline: game design, C# and C++ gameplay code in Unity and Unreal Engine, builds for PC, web and Android, store pages, pricing and patches based on player feedback.",
+        "Games played on YouTube by Markiplier and Jacksepticeye, two creators with over 30M subscribers each."
+      ]
     },
     {
       "id": "team-vision-tech-head",
       "role": "Tech Head",
-      "org": "Team Vision AR/VR Club",
-      "period": "July 2024 - May 2025"
+      "org": "Team Vision AR/VR Club, KJSSE",
+      "period": "Jul 2024 - May 2025",
+      "location": "Mumbai, India",
+      "bullets": [
+        "Mentored the student team that won Realms, the hackathon hosted by Team Vision.",
+        "Ran AR/VR workshops and training sessions for members and led the club's technical projects.",
+        "Designed and maintained the club's website."
+      ]
     }
   ],
   "skills": [
     "Full-Stack Development (Web & Mobile)",
-    "AI/ML",
-    "Competitive Programming (4 Star CodeChef, 300+ LeetCode)",
-    "Backend Architecture & APIs",
+    "On-device AI/ML (TFLite, MediaPipe, YOLO)",
+    "Competitive Programming (Codeforces Expert, 4★ CodeChef, 500+ LeetCode)",
+    "Backend Architecture, APIs & Event Streaming",
+    "Smart Contracts & Cross-chain (Solidity, Chainlink CCIP)",
     "Real-time Communication (WebRTC, Socket.io)",
-    "Database Design & Optimization",
     "Game Development (Unity, Unreal Engine)",
     "XR Development (WebXR, AR/VR)"
   ],
   "techStack": {
-    "Languages": "C, C++, C#, JavaScript, Python, Java, Dart",
-    "Frontend": "HTML, CSS, React, Next.js, Three.js",
-    "Backend": "Node.js, Express, FastAPI",
-    "Databases": "MongoDB, PostgreSQL, Firebase",
-    "Game Engines": "Unity, Unreal Engine",
-    "Mobile": "Flutter, React Native",
-    "AI/ML": "Scikit-learn, TensorFlow",
-    "Other": "Socket.io, WebRTC, WebXR"
+    "Languages": "C++, C, Java, Python, Go, TypeScript, JavaScript, C#, Dart, Solidity, SQL",
+    "Backend & Web": "FastAPI, Spring Boot, Node.js, Express, React, Next.js, REST, GraphQL, Socket.io, Kafka",
+    "AI/ML": "YOLO (Ultralytics), TensorFlow, TFLite, Scikit-learn, MediaPipe, OpenCV, Gemini, MCP",
+    "Cloud & Data": "AWS, Docker, Kubernetes, OpenShift, GitHub Actions, Linux, Git, PostgreSQL, MongoDB, Redis",
+    "Mobile & Games": "Flutter, React Native, Unity, Unreal Engine",
+    "Blockchain": "Foundry, Hardhat, Chainlink, Hedera, ENS",
+    "Certifications": "Deep Learning Specialization (DeepLearning.AI), Docker, Kubernetes & OpenShift (IBM), Full Stack (Meta)"
   },
   "achievements": [
-    "Won Most Addictive Game at 8th Wall Forge the Future Game Jam",
-    "Top 10 in I Love Hackathon Pune Web3 Edition",
-    "Top 6 in KJSSE Hack 8",
-    "4 Star CodeChef Rating",
-    "300+ LeetCode problems solved",
-    "Games featured by Markiplier and Jacksepticeye (20M+ subscribers)",
-    "200K+ game downloads across platforms"
+    "ETHGlobal ETHOnline 2026: Hedera \"Tokenization of Anything\" track winner (NameGate)",
+    "“Most Addictive Game,” 8th Wall Forge the Future Game Jam",
+    "1st Runner-Up, ISTE Pixel Wars",
+    "Expert on Codeforces, 4★ CodeChef, 500+ LeetCode problems solved",
+    "Merged open-source PRs to ultralytics, microsoft and volcano-sh",
+    "Games played by Markiplier and Jacksepticeye (30M+ subscribers each)",
+    "100,000+ game downloads across itch.io, Steam and Google Play",
+    "Publishing deal with Upscale Studio to port Captive to Nintendo"
   ],
   "hackathons": [
     {
+      "id": "ethonline-2026",
+      "title": "ETHGlobal ETHOnline 2026",
+      "result": "Winner: Hedera \"Tokenization of Anything\" track",
+      "date": "2026",
+      "url": "",
+      "isWinner": true
+    },
+    {
       "id": "8thwall-forge",
       "title": "8th Wall Forge the Future Game Jam",
-      "result": "Won Most Addictive Game",
+      "result": "Won “Most Addictive Game”",
       "date": "2025",
       "url": "",
       "isWinner": true
     },
     {
-      "id": "ilh-pune-web3",
-      "title": "I Love Hackathon Pune - Web3 Edition",
-      "result": "Top 10",
-      "date": "2025",
+      "id": "iste-pixel-wars",
+      "title": "ISTE Pixel Wars",
+      "result": "1st Runner-Up",
+      "date": "",
+      "url": "",
+      "isWinner": false
+    },
+    {
+      "id": "acm-aftermath",
+      "title": "ACM Aftermath Hackathon",
+      "result": "Finalist: top 6 of 50 teams",
+      "date": "",
       "url": "",
       "isWinner": false
     },
     {
       "id": "kjsse-hack8",
-      "title": "KJSSE Hack 8",
-      "result": "Top 6",
+      "title": "KJSSE HACK 8",
+      "result": "Finalist: top 6 of 50 teams",
       "date": "2025",
+      "url": "",
+      "isWinner": false
+    },
+    {
+      "id": "ilh-pune-web3",
+      "title": "I Love Hackathon Pune - Web3 Edition",
+      "result": "Top 10 of 50",
+      "date": "2025",
+      "url": "",
+      "isWinner": false
+    },
+    {
+      "id": "idea-hackathon",
+      "title": "iDEA Hackathon (national)",
+      "result": "Top 50",
+      "date": "",
+      "url": "",
+      "isWinner": false
+    },
+    {
+      "id": "crackathon-2023",
+      "title": "Crackathon 2023 (competitive programming)",
+      "result": "Finalist",
+      "date": "2023",
       "url": "",
       "isWinner": false
     }
   ],
-  "oss": [
+  "oss": [],
+  "ossHidden": [],
+  "ossExcludedRepos": [
+    "is-a-dev/register"
+  ],
+  "caseStudies": [
     {
-      "id": "data-formulator-351",
-      "repo": "microsoft/data-formulator",
-      "repoUrl": "https://github.com/microsoft/data-formulator",
-      "prNumber": "351",
-      "prUrl": "https://github.com/microsoft/data-formulator/pull/351"
+      "id": "praman",
+      "name": "PRAMAN",
+      "tagline": "An authorisation layer that lets AI shopping agents pay merchants safely",
+      "tech": [
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "Redis",
+        "Next.js",
+        "Gemini",
+        "MCP"
+      ],
+      "bullets": [
+        "A 12-rule deterministic gate with no LLM in the payment path, paying merchants on Razorpay (test mode) and logging every decision to a hash-chained ledger that exports as a dispute pack.",
+        "Gemini 2.5 Flash turns photos of handwritten price lists into a store catalog, holding back low-confidence items before the store goes live; agents connect over an MCP server.",
+        "A 200-session harness (benign, prompt injection, replay, identity spoofing): the gate stopped all 65 bad transactions with no legitimate order blocked, at 3.6 ms p50. Backed by 312 tests."
+      ]
     },
     {
-      "id": "data-formulator-436",
-      "repo": "microsoft/data-formulator",
-      "repoUrl": "https://github.com/microsoft/data-formulator",
-      "prNumber": "436",
-      "prUrl": "https://github.com/microsoft/data-formulator/pull/436"
+      "id": "tugboat",
+      "name": "Tugboat",
+      "tagline": "A self-hosted, Vercel-style deployment platform",
+      "tech": [
+        "Node.js",
+        "Docker",
+        "Traefik",
+        "Cloud Native Buildpacks",
+        "SQLite"
+      ],
+      "bullets": [
+        "Every git push is built into a container with Cloud Native Buildpacks (no Dockerfile), routed by Traefik and given a public HTTPS preview link.",
+        "Merges to main reach production through a health-checked blue-green swap, verified in tests with zero dropped requests, with one-click rollback.",
+        "Control plane with GitHub OAuth, HMAC-verified webhooks, live build logs and per-project env vars and CPU/memory limits, tested end to end against real Docker, Traefik, GitHub and Cloudflare tunnels with no mocks."
+      ]
     },
     {
-      "id": "apm-1367",
-      "repo": "microsoft/apm",
-      "repoUrl": "https://github.com/microsoft/apm",
-      "prNumber": "1367",
-      "prUrl": "https://github.com/microsoft/apm/pull/1367"
+      "id": "namegate",
+      "name": "NameGate",
+      "tagline": "Tokenized bonds with ENSv2 subnames as an on-chain compliance layer",
+      "tech": [
+        "Solidity",
+        "ENSv2",
+        "Chainlink CCIP",
+        "Hedera"
+      ],
+      "award": "ETHOnline 2026 · Hedera track winner",
+      "bullets": [
+        "A permissionless beacon contract reads ENS records and relays KYC state cross-chain over Chainlink CCIP, instead of an off-chain database.",
+        "194 tests, including 49 live tests on Sepolia and Hedera testnet, which caught an 8- vs 18-decimal mismatch between HBAR and its EVM representation."
+      ]
     },
     {
-      "id": "ultralytics-25824",
-      "repo": "ultralytics/ultralytics",
-      "repoUrl": "https://github.com/ultralytics/ultralytics",
-      "prNumber": "25824",
-      "prUrl": "https://github.com/ultralytics/ultralytics/pull/25824"
+      "id": "wayfinder",
+      "name": "Project Wayfinder",
+      "tagline": "An offline phone app for blind and deaf users",
+      "tech": [
+        "Flutter",
+        "YOLO",
+        "MiDaS",
+        "TFLite"
+      ],
+      "bullets": [
+        "Combines obstacle detection, depth estimation and sign language in one hardware-free, fully offline app.",
+        "20+ FPS on-device obstacle detection over a 20 m range by combining YOLO boxes with MiDaS depth maps and prioritised text-to-speech alerts.",
+        "Trained and compared 13 YOLO models (v10n, 11s, 26s) on a 7-class COCO + Kaggle dataset; best mAP50-95 0.576."
+      ]
+    },
+    {
+      "id": "milan",
+      "name": "Milan",
+      "tagline": "Indian Sign Language learning app, live on Google Play",
+      "tech": [
+        "Flutter",
+        "MediaPipe",
+        "TFLite"
+      ],
+      "bullets": [
+        "ISLRTC-verified sign dictionary, lessons, real-time practice feedback and daily streaks.",
+        "98%+ gesture recognition with two models on MediaPipe hand landmarks: Dynamic Time Warping for moving signs and a Random Forest for static ones, running offline with TFLite."
+      ]
+    },
+    {
+      "id": "skillversus",
+      "name": "SkillVersus",
+      "tagline": "Real-time 1v1 coding duels, contests and typing battles",
+      "tech": [
+        "React",
+        "Node.js",
+        "MongoDB",
+        "Redis",
+        "Socket.io",
+        "Judge0"
+      ],
+      "bullets": [
+        "Run in a college lab with 24 concurrent users.",
+        "Socket.io and Redis for matchmaking and live match state, Judge0 for sandboxed multi-language execution, a 5-tier ranking, and fullscreen and tab-switch checks against cheating."
+      ]
+    }
+  ],
+  "publications": [
+    {
+      "id": "cvr26",
+      "kind": "paper",
+      "title": "Gesture-Based Assistive Tool for Children with Speech and Hearing Impairments",
+      "venue": "CVR 2026, International Conference on Computer Vision and Robotics · Springer LNNS 2250",
+      "detail": "P. Mistry, A. Waghdhare, S. Sankhe",
+      "url": "https://doi.org/10.1007/978-3-032-39794-2_32"
+    },
+    {
+      "id": "wayfinder-journal",
+      "kind": "paper",
+      "title": "On-Device Assistive Perception for Blind Pedestrian Navigation and Sign-Language Communication on a Commodity Smartphone",
+      "venue": "Journal manuscript",
+      "detail": "In preparation"
+    },
+    {
+      "id": "sanketika",
+      "kind": "copyright",
+      "title": "Sanketika (Indian Sign Language dataset)",
+      "venue": "Copyright Office, India",
+      "detail": "Diary No. LD-22598/2025-CO"
+    },
+    {
+      "id": "road-traffic",
+      "kind": "copyright",
+      "title": "Indian road-traffic detection dataset",
+      "venue": "Copyright Office, India",
+      "detail": "Filed"
     }
   ],
   "projectOverrides": {

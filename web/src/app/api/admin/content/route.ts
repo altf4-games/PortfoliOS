@@ -1,19 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { getSiteData } from "@/lib/content";
+import { getDefaultSiteData, getSiteData } from "@/lib/content";
 import { writeContentOverride, isKvConfigured } from "@/lib/kv";
 import type { SiteData } from "@/lib/types";
 
 // The proxy also gates /api/admin/*, but proxy is meant for redirects, not as the sole
 // authorization layer, so every handler here re-checks the session itself.
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const session = await auth();
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const data = await getSiteData();
+  // ?defaults=1 returns content/site-data.json, for resetting stale saved content.
+  const data = req.nextUrl.searchParams.get("defaults") ? getDefaultSiteData() : await getSiteData();
   return NextResponse.json({ data, kvConfigured: isKvConfigured() });
 }
 

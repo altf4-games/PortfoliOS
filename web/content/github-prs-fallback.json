@@ -1,0 +1,86 @@
+[
+  {
+    "repo": "is-a-dev/register",
+    "repoUrl": "https://github.com/is-a-dev/register",
+    "repoStars": null,
+    "ownerAvatar": "https://github.com/is-a-dev.png?size=64",
+    "number": 60869,
+    "title": "Register pradyum.is-a.dev",
+    "url": "https://github.com/is-a-dev/register/pull/60869",
+    "mergedAt": "2026-11-12T18:31:36Z",
+    "additions": null,
+    "deletions": null
+  },
+  {
+    "repo": "volcano-sh/agentcube",
+    "repoUrl": "https://github.com/volcano-sh/agentcube",
+    "repoStars": null,
+    "ownerAvatar": "https://github.com/volcano-sh.png?size=64",
+    "number": 498,
+    "title": "workloadmanager: add tests for sandbox entrypoint probing",
+    "url": "https://github.com/volcano-sh/agentcube/pull/498",
+    "mergedAt": "2026-11-03T03:46:04Z",
+    "additions": null,
+    "deletions": null
+  },
+  {
+    "repo": "volcano-sh/agentcube",
+    "repoUrl": "https://github.com/volcano-sh/agentcube",
+    "repoStars": null,
+    "ownerAvatar": "https://github.com/volcano-sh.png?size=64",
+    "number": 484,
+    "title": "router: stop duplicating X-Forwarded-For",
+    "url": "https://github.com/volcano-sh/agentcube/pull/484",
+    "mergedAt": "2026-10-23T01:26:53Z",
+    "additions": null,
+    "deletions": null
+  },
+  {
+    "repo": "microsoft/data-formulator",
+    "repoUrl": "https://github.com/microsoft/data-formulator",
+    "repoStars": null,
+    "ownerAvatar": "https://github.com/microsoft.png?size=64",
+    "number": 436,
+    "title": "Add Hindi (hi) locale for frontend i18n",
+    "url": "https://github.com/microsoft/data-formulator/pull/436",
+    "mergedAt": "2026-08-31T23:35:58Z",
+    "additions": null,
+    "deletions": null
+  },
+  {
+    "repo": "ultralytics/ultralytics",
+    "repoUrl": "https://github.com/ultralytics/ultralytics",
+    "repoStars": null,
+    "ownerAvatar": "https://github.com/ultralytics.png?size=64",
+    "number": 25824,
+    "title": "Fix #25764: Don't send local project paths as Platform slugs",
+    "url": "https://github.com/ultralytics/ultralytics/pull/25824",
+    "mergedAt": "2026-08-20T00:45:09Z",
+    "additions": null,
+    "deletions": null
+  },
+  {
+    "repo": "microsoft/apm",
+    "repoUrl": "https://github.com/microsoft/apm",
+    "repoStars": null,
+    "ownerAvatar": "https://github.com/microsoft.png?size=64",
+    "number": 1367,
+    "title": "refactor(cli): clean up compilation config and registry cursor",
+    "url": "https://github.com/microsoft/apm/pull/1367",
+    "mergedAt": "2026-05-26T20:50:31Z",
+    "additions": null,
+    "deletions": null
+  },
+  {
+    "repo": "microsoft/data-formulator",
+    "repoUrl": "https://github.com/microsoft/data-formulator",
+    "repoStars": null,
+    "ownerAvatar": "https://github.com/microsoft.png?size=64",
+    "number": 351,
+    "title": "fix: 2 agent bugs and improve test coverage",
+    "url": "https://github.com/microsoft/data-formulator/pull/351",
+    "mergedAt": "2026-05-21T18:16:38Z",
+    "additions": null,
+    "deletions": null
+  }
+]
