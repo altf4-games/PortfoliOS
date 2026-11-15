@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useDragControls } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, animate, motion, useDragControls, useMotionValue } from "motion/react";
 import { useAppStore, type WindowId } from "@/store/useAppStore";
 import { APP_META, appName } from "@/apps/meta";
 import { APP_COMPONENTS } from "@/apps/registry";
@@ -11,6 +11,7 @@ import { useSiteData } from "@/lib/useSiteData";
 import { useClock } from "@/components/os/useClock";
 import Toasts from "@/components/os/Toasts";
 import Effects from "@/components/os/Effects";
+import TodayPage from "./TodayPage";
 
 // One phone OS, in the same design language as the Golden Gate desktop. It shares the
 // desktop's window store: the "open app" is the top of windowOrder, so an app opening
@@ -154,6 +155,23 @@ export default function PhoneOS() {
   const custom = useAppStore((s) => s.customWallpaper);
   const [locked, setLocked] = useState(true);
   const [origin, setOrigin] = useState({ x: 0, y: 0 });
+  // Home pages: 0 = apps, 1 = widgets. Swiped horizontally like iOS; the Dock stays put.
+  const [page, setPage] = useState(0);
+  const [pageW, setPageW] = useState(390);
+  const pagerX = useMotionValue(0);
+  const dragged = useRef(false);
+
+  useEffect(() => {
+    const onResize = () => setPageW(window.innerWidth);
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  useEffect(() => {
+    const controls = animate(pagerX, -page * pageW, { type: "spring", stiffness: 320, damping: 34 });
+    return () => controls.stop();
+  }, [page, pageW, pagerX]);
 
   // The phone has a single look, so it always runs the Golden Gate styling.
   useEffect(() => {
@@ -166,7 +184,14 @@ export default function PhoneOS() {
   const wp = resolveWallpaper("golden", wallpapers, custom);
 
   function launch(id: WindowId, e: React.MouseEvent) {
+    // A swipe that ends over an icon must not also open it.
+    if (dragged.current) return;
     setOrigin({ x: e.clientX, y: e.clientY });
+    openWindow(id);
+  }
+  function openFromWidget(id: WindowId) {
+    if (dragged.current) return;
+    setOrigin({ x: pageW / 2, y: window.innerHeight / 2 });
     openWindow(id);
   }
 
@@ -178,28 +203,55 @@ export default function PhoneOS() {
       {/* Home screen */}
       {!locked && (
       <motion.div
-        className="absolute inset-0 pt-16 px-5 flex flex-col"
+        className="absolute inset-0 pt-16 flex flex-col"
         initial={{ opacity: 0, scale: 1.06 }}
         animate={{ scale: current ? 0.94 : 1, opacity: 1 }}
         transition={{ duration: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
         style={{ paddingTop: "max(4rem, calc(env(safe-area-inset-top) + 3rem))" }}
       >
-        <div className="grid grid-cols-4 gap-x-4 gap-y-5 mt-2">
-          <Widget />
-          {GRID.map((id) => (
-            <button key={id} onClick={(e) => launch(id, e)} className="flex flex-col items-center gap-1.5 active:opacity-60">
-              <GoldenIcon id={id} className="w-full max-w-[64px] h-auto" />
-              <span className="text-[11.5px] text-white truncate max-w-full" style={{ textShadow: "0 1px 2px rgba(0,0,0,.6)" }}>
-                {appName(id, "golden")}
-              </span>
+        <div className="relative flex-1 min-h-0 overflow-hidden">
+          <motion.div
+            className="absolute inset-y-0 left-0 flex touch-pan-y"
+            style={{ x: pagerX, width: pageW * 2 }}
+            drag="x"
+            dragConstraints={{ left: -pageW, right: 0 }}
+            dragElastic={0.18}
+            dragMomentum={false}
+            onDragStart={() => (dragged.current = true)}
+            onDragEnd={(_, info) => {
+              const swipe = info.offset.x + info.velocity.x * 0.2;
+              const next = swipe < -pageW * 0.18 ? 1 : swipe > pageW * 0.18 ? 0 : page;
+              if (next === page) animate(pagerX, -page * pageW, { type: "spring", stiffness: 320, damping: 34 });
+              else setPage(next);
+              setTimeout(() => (dragged.current = false), 0);
+            }}
+          >
+            <div className="h-full px-5 overflow-y-auto" style={{ width: pageW }}>
+              <div className="grid grid-cols-4 gap-x-4 gap-y-5 mt-2">
+                <Widget />
+                {GRID.map((id) => (
+                  <button key={id} onClick={(e) => launch(id, e)} className="flex flex-col items-center gap-1.5 active:opacity-60">
+                    <GoldenIcon id={id} className="w-full max-w-[64px] h-auto pointer-events-none" />
+                    <span className="text-[11.5px] text-white truncate max-w-full" style={{ textShadow: "0 1px 2px rgba(0,0,0,.6)" }}>
+                      {appName(id, "golden")}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="h-full px-5 overflow-y-auto" style={{ width: pageW }}>
+              <TodayPage open={openFromWidget} />
+            </div>
+          </motion.div>
+        </div>
+        <div className="mt-2 mb-3 flex justify-center gap-1.5">
+          {[0, 1].map((i) => (
+            <button key={i} aria-label={`Page ${i + 1}`} onClick={() => setPage(i)} className="p-1 -m-1">
+              <span className={`block w-[7px] h-[7px] rounded-full transition-colors ${page === i ? "bg-white" : "bg-white/40"}`} />
             </button>
           ))}
         </div>
-        <div className="mt-auto mb-3 flex justify-center gap-1.5">
-          <span className="w-[7px] h-[7px] rounded-full bg-white" />
-          <span className="w-[7px] h-[7px] rounded-full bg-white/40" />
-        </div>
-        <div className="mb-3 rounded-[30px] bg-white/20 backdrop-blur-xl p-3 grid grid-cols-4 gap-4" style={{ marginBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}>
+        <div className="mx-5 mb-3 rounded-[30px] bg-white/20 backdrop-blur-xl p-3 grid grid-cols-4 gap-4" style={{ marginBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}>
           {DOCK.map((id) => (
             <button key={id} onClick={(e) => launch(id, e)} className="active:opacity-60">
               <GoldenIcon id={id} className="w-full max-w-[64px] h-auto mx-auto" />
