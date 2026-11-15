@@ -19,6 +19,10 @@ function mergeWithDefaults(override: Partial<SiteData> | null): SiteData {
     achievements: override.achievements ?? DEFAULTS.achievements,
     hackathons: override.hackathons ?? DEFAULTS.hackathons,
     oss: override.oss ?? DEFAULTS.oss,
+    ossHidden: override.ossHidden ?? DEFAULTS.ossHidden,
+    ossExcludedRepos: override.ossExcludedRepos ?? DEFAULTS.ossExcludedRepos,
+    caseStudies: override.caseStudies ?? DEFAULTS.caseStudies,
+    publications: override.publications ?? DEFAULTS.publications,
     projectOverrides: { ...DEFAULTS.projectOverrides, ...override.projectOverrides },
   };
 }

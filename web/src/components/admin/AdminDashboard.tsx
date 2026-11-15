@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { SiteData } from "@/lib/types";
+import type { MergedPr, SiteData } from "@/lib/types";
 import { logoutAction } from "@/app/admin/actions";
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
@@ -10,6 +10,39 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       <span className="text-xs uppercase tracking-wide text-white/50">{label}</span>
       {children}
     </label>
+  );
+}
+
+// Raw JSON editing for list fields that would need a lot of bespoke form UI (case studies,
+// publications). Keeps the text locally so half-typed JSON isn't thrown away.
+function JsonField<T>({ value, onChange, rows = 10 }: { value: T; onChange: (v: T) => void; rows?: number }) {
+  const [text, setText] = useState(() => JSON.stringify(value, null, 2));
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    // Re-sync when the value is replaced from outside (e.g. "reset to defaults").
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setText(JSON.stringify(value, null, 2));
+  }, [value]);
+  return (
+    <div className="space-y-1">
+      <textarea
+        className={`${inputClass} font-mono text-xs`}
+        rows={rows}
+        value={text}
+        spellCheck={false}
+        onChange={(e) => {
+          setText(e.target.value);
+          try {
+            const parsed = JSON.parse(e.target.value);
+            setError(null);
+            onChange(parsed);
+          } catch (err) {
+            setError(err instanceof Error ? err.message : "Invalid JSON");
+          }
+        }}
+      />
+      {error && <p className="text-xs text-red-400">{error}</p>}
+    </div>
   );
 }
 
@@ -25,6 +58,7 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
   // user just typed, mid-edit, without it being immediately stripped by the trim/filter
   // pass — the input's displayed value must be the raw text, not the reprocessed array.
   const [includedText, setIncludedText] = useState("");
+  const [prs, setPrs] = useState<MergedPr[] | null>(null);
 
   useEffect(() => {
     fetch("/api/admin/content")
@@ -34,7 +68,18 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
         setKvConfigured(body.kvConfigured);
         setIncludedText((body.data.projectOverrides.included ?? []).join(", "));
       });
+    fetch("/api/admin/prs")
+      .then((r) => r.json())
+      .then((list) => Array.isArray(list) && setPrs(list))
+      .catch(() => {});
   }, []);
+
+  async function loadDefaults() {
+    if (!confirm("Replace every field with the defaults from content/site-data.json? Nothing is saved until you press Save.")) return;
+    const body = await fetch("/api/admin/content?defaults=1").then((r) => r.json());
+    setData(body.data);
+    setIncludedText((body.data.projectOverrides.included ?? []).join(", "));
+  }
 
   async function save() {
     if (!data) return;
@@ -65,11 +110,16 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
           <h1 className="text-lg font-mono">PortfoliOS Admin</h1>
           <p className="text-xs text-white/40">Signed in as @{userLogin}</p>
         </div>
+        <div className="flex items-center gap-4">
+        <button type="button" onClick={loadDefaults} className="text-xs text-white/50 hover:text-white underline">
+          Reset to repository defaults
+        </button>
         <form action={logoutAction}>
           <button type="submit" className="text-xs text-white/50 hover:text-white underline">
             Log out
           </button>
         </form>
+        </div>
       </div>
 
       {!kvConfigured && (
@@ -146,6 +196,28 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
               onChange={(e) => setData({ ...data, profile: { ...data.profile, hostname: e.target.value } })}
             />
           </Field>
+          {(
+            [
+              ["tagline", "Tagline"],
+              ["location", "Location"],
+              ["currently", "Currently (shown under your name)"],
+              ["avatarUrl", "Avatar image URL"],
+              ["portfolioUrl", "Portfolio URL"],
+              ["orcidUrl", "ORCID URL"],
+              ["email", "Public email (blank hides it)"],
+              ["leetcodeUsername", "LeetCode username"],
+              ["codechefUsername", "CodeChef username"],
+              ["codeforcesUsername", "Codeforces handle"],
+            ] as const
+          ).map(([key, label]) => (
+            <Field key={key} label={label}>
+              <input
+                className={inputClass}
+                value={data.profile[key] ?? ""}
+                onChange={(e) => setData({ ...data, profile: { ...data.profile, [key]: e.target.value } })}
+              />
+            </Field>
+          ))}
         </div>
       </section>
 
@@ -247,7 +319,8 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
         </div>
         <div className="space-y-3">
           {data.experience.map((exp, i) => (
-            <div key={exp.id} className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 items-start bg-white/5 rounded-md p-2">
+            <div key={exp.id} className="space-y-2 bg-white/5 rounded-md p-2">
+            <div className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 items-start">
               <input
                 className={inputClass}
                 placeholder="Role"
@@ -285,6 +358,28 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
               >
                 Remove
               </button>
+            </div>
+              <input
+                className={inputClass}
+                placeholder="Location (optional)"
+                value={exp.location ?? ""}
+                onChange={(e) => {
+                  const next = [...data.experience];
+                  next[i] = { ...exp, location: e.target.value };
+                  setData({ ...data, experience: next });
+                }}
+              />
+              <textarea
+                className={inputClass}
+                rows={3}
+                placeholder="Bullet points, one per line"
+                value={(exp.bullets ?? []).join("\n")}
+                onChange={(e) => {
+                  const next = [...data.experience];
+                  next[i] = { ...exp, bullets: e.target.value.split("\n") };
+                  setData({ ...data, experience: next });
+                }}
+              />
             </div>
           ))}
         </div>
@@ -467,10 +562,51 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
         </div>
       </section>
 
-      {/* Open Source Contributions */}
+      {/* Auto-fetched PRs */}
+      <section className="space-y-3">
+        <h2 className="text-sm font-semibold text-cyan-300">Open Source — merged PRs from GitHub</h2>
+        <p className="text-xs text-white/40">
+          Pulled automatically (merged PRs you authored in repos you don&apos;t own). Untick any you don&apos;t want shown.
+        </p>
+        {!prs && <p className="text-xs text-white/40">Loading from GitHub…</p>}
+        <div className="space-y-1">
+          {prs?.map((pr) => {
+            const hidden = data.ossHidden.some((u) => u.toLowerCase() === pr.url.toLowerCase());
+            const repoExcluded = data.ossExcludedRepos.some((r) => r.toLowerCase() === pr.repo.toLowerCase());
+            return (
+              <label key={pr.url} className={`flex items-center gap-2 text-xs bg-white/5 rounded-md px-2 py-1.5 ${repoExcluded ? "opacity-40" : ""}`}>
+                <input
+                  type="checkbox"
+                  checked={!hidden}
+                  disabled={repoExcluded}
+                  onChange={(e) =>
+                    setData({
+                      ...data,
+                      ossHidden: e.target.checked ? data.ossHidden.filter((u) => u.toLowerCase() !== pr.url.toLowerCase()) : [...data.ossHidden, pr.url],
+                    })
+                  }
+                />
+                <span className="text-white/60 shrink-0">
+                  {pr.repo}#{pr.number}
+                </span>
+                <span className="truncate">{pr.title}</span>
+              </label>
+            );
+          })}
+        </div>
+        <Field label="Exclude whole repos (comma-separated)">
+          <input
+            className={inputClass}
+            value={data.ossExcludedRepos.join(", ")}
+            onChange={(e) => setData({ ...data, ossExcludedRepos: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) })}
+          />
+        </Field>
+      </section>
+
+      {/* Open Source Contributions (manual extras) */}
       <section className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-cyan-300">Open Source Contributions</h2>
+          <h2 className="text-sm font-semibold text-cyan-300">Extra PRs (only if GitHub search misses one)</h2>
           <button
             type="button"
             className="text-xs text-cyan-300 hover:text-cyan-200"
@@ -488,7 +624,7 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
           </button>
         </div>
         <p className="text-xs text-white/40">
-          Use the arrows to reorder. Add one row per PR — rows with the same repo are grouped together on display.
+          Rarely needed now. Add one row per PR that the automatic list above doesn&apos;t include.
         </p>
         <div className="space-y-3">
           {data.oss.map((c, i) => {
@@ -576,6 +712,22 @@ export default function AdminDashboard({ userLogin }: { userLogin: string }) {
             );
           })}
         </div>
+      </section>
+
+      {/* Case studies */}
+      <section className="space-y-3">
+        <h2 className="text-sm font-semibold text-cyan-300">Featured projects (case studies)</h2>
+        <p className="text-xs text-white/40">
+          JSON array of {"{ id, name, tagline, tech[], bullets[], award?, url?, repoUrl? }"}. Shown above the GitHub grid.
+        </p>
+        <JsonField value={data.caseStudies} onChange={(v) => setData({ ...data, caseStudies: v })} rows={14} />
+      </section>
+
+      {/* Publications */}
+      <section className="space-y-3">
+        <h2 className="text-sm font-semibold text-cyan-300">Publications &amp; research</h2>
+        <p className="text-xs text-white/40">JSON array of {"{ id, kind: \"paper\" | \"copyright\" | \"other\", title, venue, detail?, url? }"}.</p>
+        <JsonField value={data.publications} onChange={(v) => setData({ ...data, publications: v })} rows={8} />
       </section>
 
       {/* Achievements */}

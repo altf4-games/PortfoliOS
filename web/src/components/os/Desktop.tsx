@@ -1,93 +1,113 @@
 "use client";
 
-import { useEffect } from "react";
-import { useAppStore } from "@/store/useAppStore";
-import WallpaperLayer from "./WallpaperLayer";
-import MenuBar from "./MenuBar";
-import Dock from "./Dock";
-import DesktopIcons from "./DesktopIcons";
-import WindowFrame from "./WindowFrame";
-import Terminal from "./Terminal";
-import ProjectsWindow from "./ProjectsWindow";
-import HackathonsWindow from "./HackathonsWindow";
-import OssWindow from "./OssWindow";
-import ExperienceWindow from "./ExperienceWindow";
-import SettingsWindow from "./SettingsWindow";
-import { TerminalIcon } from "./icons";
+import { useCallback, useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import { AnimatePresence, motion, type TargetAndTransition } from "motion/react";
+import { useAppStore, type ThemeId } from "@/store/useAppStore";
+import BootScreen from "./BootScreen";
+import Effects from "./Effects";
+import Toasts from "./Toasts";
+import GoldenShell from "@/themes/golden/GoldenShell";
 
-// Desktop-only: mobile gets MobileTerminalApp instead (see app/page.tsx), so nothing here
-// needs to account for a phone-sized viewport.
+// Golden Gate is the default and ships in the main bundle; the other desktops load on
+// first switch so the default experience doesn't pay for them.
+const RetroShell = dynamic(() => import("@/themes/retro/RetroShell"), { ssr: false });
+const HyprShell = dynamic(() => import("@/themes/hypr/HyprShell"), { ssr: false });
+
+const WELCOME: Record<ThemeId, string> = {
+  golden: "Press ⌘K to search everything, or Esc to explore the room.",
+  retro: "Double-click an icon, or try the Start menu.",
+  hypr: "Alt+Enter terminal · Alt+D launcher · Alt+1-5 workspaces.",
+};
+
 export default function Desktop() {
-  const windowOrder = useAppStore((s) => s.windowOrder);
-  const windows = useAppStore((s) => s.windows);
+  const theme = useAppStore((s) => s.theme);
+  const phase = useAppStore((s) => s.phase);
+  const setPhase = useAppStore((s) => s.setPhase);
+  const effect = useAppStore((s) => s.effect);
   const syncWindowsToViewport = useAppStore((s) => s.syncWindowsToViewport);
+  const [switching, setSwitching] = useState<ThemeId | null>(null);
+  const prevTheme = useRef(theme);
+  const firstReady = useRef(true);
 
-  // The store's default window (terminal, open on load) is sized before any component can
-  // check the real viewport. Reconcile it -- and anything opened since -- against whatever
-  // the browser window actually is, on mount and on resize.
   useEffect(() => {
-    function sync() {
-      syncWindowsToViewport({ width: window.innerWidth, height: window.innerHeight });
-    }
+    const sync = () => syncWindowsToViewport({ width: window.innerWidth, height: window.innerHeight });
     sync();
     window.addEventListener("resize", sync);
     return () => window.removeEventListener("resize", sync);
-  }, [syncWindowsToViewport]);
+  }, [syncWindowsToViewport, theme]);
 
-  const anyMaximized = windowOrder.some((id) => windows[id]?.maximized);
+  // Theme switches play the new theme's (short) boot sequence over the swap.
+  useEffect(() => {
+    if (prevTheme.current !== theme && phase === "ready") {
+      setSwitching(theme);
+    }
+    prevTheme.current = theme;
+  }, [theme, phase]);
+
+  const onBootDone = useCallback(() => {
+    setPhase("ready");
+    if (firstReady.current) {
+      firstReady.current = false;
+      const s = useAppStore.getState();
+      if (s.windowOrder.length === 0) {
+        if (s.theme === "hypr") s.openWindow("terminal");
+        s.openWindow("about");
+      }
+      setTimeout(() => s.pushToast({ icon: "hi", title: "Welcome to PortfoliOS", body: WELCOME[s.theme] }), 900);
+    }
+  }, [setPhase]);
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      const s = useAppStore.getState();
+      if (s.phase !== "ready") return;
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        s.toggleOverlay(s.theme === "golden" ? "spotlight" : s.theme === "retro" ? "start" : "launcher");
+        return;
+      }
+      if (e.key === "Escape") {
+        if (s.effect) {
+          if (s.effect !== "crash") s.setEffect(null);
+          return;
+        }
+        e.preventDefault();
+        if (s.overlay) s.setOverlay(null);
+        else if (!s.disable3D) s.toggleMode();
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  const transform: TargetAndTransition =
+    effect === "barrel"
+      ? { rotate: [0, 360], transition: { duration: 1.2, ease: [0.6, 0, 0.3, 1] as const } }
+      : effect === "meltdown"
+        ? { y: [0, 0, "110vh", "110vh", 0], rotate: [0, -2, 8, 8, 0], transition: { duration: 4.2, times: [0, 0.1, 0.4, 0.85, 1], ease: "easeInOut" } }
+        : { rotate: 0, y: 0 };
 
   return (
-    <div className="absolute inset-0 overflow-hidden">
-      <WallpaperLayer />
-      <div className="absolute inset-0 bg-black/10" />
+    <div className="absolute inset-0 overflow-hidden" data-shell={theme}>
+      <motion.div
+        className="absolute inset-0"
+        animate={transform}
+        style={{ filter: effect === "konami" ? "hue-rotate(0deg)" : undefined, animation: effect === "konami" ? "konami-hue 1.2s linear infinite" : undefined }}
+      >
+        {theme === "golden" && <GoldenShell />}
+        {theme === "retro" && <RetroShell />}
+        {theme === "hypr" && <HyprShell />}
+      </motion.div>
+      <style>{`@keyframes konami-hue{to{filter:hue-rotate(360deg)}}`}</style>
 
-      {/* Every layer below shares the same full-viewport coordinate space, so window
-          positions (and "maximize") line up with real screen dimensions instead of a
-          flex-offset sub-region. */}
-      <MenuBar />
-      <DesktopIcons />
+      <Toasts />
+      <AnimatePresence>{effect && <Effects key={effect} />}</AnimatePresence>
 
-      <div className="absolute inset-0 pointer-events-none">
-        {windowOrder.includes("terminal") && (
-          <WindowFrame id="terminal" title="terminal — zsh" icon={<TerminalIcon className="w-3.5 h-3.5" />}>
-            <Terminal />
-          </WindowFrame>
-        )}
-        {windowOrder.includes("projects") && (
-          <WindowFrame id="projects" title="Projects">
-            <ProjectsWindow />
-          </WindowFrame>
-        )}
-        {windowOrder.includes("hackathons") && (
-          <WindowFrame id="hackathons" title="Hackathons">
-            <HackathonsWindow />
-          </WindowFrame>
-        )}
-        {windowOrder.includes("oss") && (
-          <WindowFrame id="oss" title="Open Source">
-            <OssWindow />
-          </WindowFrame>
-        )}
-        {windowOrder.includes("experience") && (
-          <WindowFrame id="experience" title="Experience">
-            <ExperienceWindow />
-          </WindowFrame>
-        )}
-        {windowOrder.includes("settings") && (
-          <WindowFrame id="settings" title="Settings">
-            <SettingsWindow />
-          </WindowFrame>
-        )}
-      </div>
-
-      {!anyMaximized && <Dock />}
-
-      {!anyMaximized && (
-        <p className="pointer-events-none absolute bottom-3 left-4 z-40 text-[11px] text-white/50 font-mono">
-          Press <kbd className="px-1 py-0.5 rounded bg-white/10 border border-white/15 text-white/70">Esc</kbd> to
-          explore the room
-        </p>
-      )}
+      <AnimatePresence>
+        {phase === "boot" && <BootScreen key="boot" theme={theme} onDone={onBootDone} />}
+        {switching && phase === "ready" && <BootScreen key={`switch-${switching}`} theme={switching} quick onDone={() => setSwitching(null)} />}
+      </AnimatePresence>
     </div>
   );
 }
